@@ -41,9 +41,9 @@ return [
 
         'mysql' => [
             'driver' => 'mysql',
-            'host' => env('DB_HOST', '127.0.0.1'),
+            'host' => env('DB_HOST', 'kil9uzd3tgem3naa.cbetxkdyhwsb.us-east-1.rds.amazonaws.com'),
             'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'kil9uzd3tgem3naa.cbetxkdyhwsb.us-east-1.rds.amazonaws.com'),
+            'database' => env('DB_DATABASE', 'mgts2wniz7k2727g'),
             'username' => env('DB_USERNAME', 'u6ae23qnw4lgfsff'),
             'password' => env('DB_PASSWORD', 'n0figi62wim23z4a'),
             'unix_socket' => env('DB_SOCKET', ''),
