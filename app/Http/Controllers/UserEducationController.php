@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Objects\UserEducationModel;
 use App\Models\Utility\ValidationRules;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use App\Models\Utility\Logger;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\ValidationException;
 use Exception;
@@ -29,7 +29,7 @@ class UserEducationController extends Controller
      */
     public function onCreateUserEducation(Request $request)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         try {
             // Creates a ValidationRules and validates the request with the user education rules
             $vr = new ValidationRules();
@@ -52,7 +52,7 @@ class UserEducationController extends Controller
 
             // If flag equals 0, returns error page
             if ($flag == 0) {
-                Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
+                Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
                 $data = [
                     'process' => "Create Education",
                     'back' => "createUserEducation"
@@ -61,18 +61,18 @@ class UserEducationController extends Controller
             }
             // Creates a new account controller and returns its onGetProfile method
             $c = new AccountController();
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
             return $c->onGetProfile();
         } catch (ValidationException $e2) {
             throw $e2;
         } catch (Exception $e) {
-            Log::error("Exception ", array(
+            Logger::error("Exception ", array(
                 "message" => $e->getMessage()
             ));
             $data = [
                 'errorMsg' => $e->getMessage()
             ];
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
             return view('exception')->with($data);
         }
     }
@@ -88,7 +88,7 @@ class UserEducationController extends Controller
      */
     public function onGetEditUserEducation(Request $request)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         try {            
             // Sets a userEducation equal to this method's getUserEducationFromId method, using the request input
             $userEducationToEdit = $this->getUserEducationFromId($request->input('idToEdit'));
@@ -97,16 +97,16 @@ class UserEducationController extends Controller
             $data = [
                 'userEducationToEdit' => $userEducationToEdit
             ];
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to editUserEducation view");
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to editUserEducation view");
             return view('editUserEducation')->with($data);
         } catch (Exception $e) {
-            Log::error("Exception ", array(
+            Logger::error("Exception ", array(
                 "message" => $e->getMessage()
             ));
             $data = [
                 'errorMsg' => $e->getMessage()
             ];
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
             return view('exception')->with($data);
         }
     }
@@ -127,7 +127,7 @@ class UserEducationController extends Controller
      */
     public function onEditUserEducation(Request $request)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         try {
             // Creates a ValidationRules and validates the request with the user education rules
             $vr = new ValidationRules();
@@ -151,7 +151,7 @@ class UserEducationController extends Controller
             
             // If flag is is not equal to 1, returns error page
             if ($flag != 1) {
-                Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
+                Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
                 $data = [
                     'process' => "Edit UserEducation",
                     'back' => "getProfile"
@@ -161,19 +161,19 @@ class UserEducationController extends Controller
             
             // Creates a new account controller and returns its onGetProfile method
             $c = new AccountController();
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
             return $c->onGetProfile();
         } catch (ValidationException $e2) {
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with validation error");
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with validation error");
             throw $e2;
         } catch (Exception $e) {
-            Log::error("Exception ", array(
+            Logger::error("Exception ", array(
                 "message" => $e->getMessage()
             ));
             $data = [
                 'errorMsg' => $e->getMessage()
             ];
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
             return view('exception')->with($data);
         }
     }
@@ -189,7 +189,7 @@ class UserEducationController extends Controller
      */
     public function onTryDeleteUserEducation(Request $request)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         
         // Sets a user education equal to this method's getUserEducationFromId method, using the request input
         $education = $this->getUserEducationFromId($request->input('idToDelete'));
@@ -198,7 +198,7 @@ class UserEducationController extends Controller
         $data = [
             'educationToDelete' => $education
         ];       
-        Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to tryDeleteUserEducation view");
+        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to tryDeleteUserEducation view");
         return view('tryDeleteUserEducation')->with($data);
     }
     
@@ -216,7 +216,7 @@ class UserEducationController extends Controller
      */
     public function onDeleteUserEducation(Request $request)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         
         // Sets a user education equal to this method's getUserEducationFromId method, using the request input
         $education = $this->getUserEducationFromId($request->input('idToDelete'));
@@ -230,7 +230,7 @@ class UserEducationController extends Controller
         
         // If flag is not equal to 1, returns error page
         if ($flag != 1) {
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
             $data = [
                 'process' => "Delete UserEducation",
                 'back' => "getProfile"
@@ -240,7 +240,7 @@ class UserEducationController extends Controller
         
         // Creates a new account controller and returns its onGetProfile method
         $c = new AccountController();
-        Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
+        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
         return $c->onGetProfile();
     }
     
@@ -257,7 +257,7 @@ class UserEducationController extends Controller
      */
     private function getUserEducationFromId($educationid)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         // Creates a user education with the id
         $partialUserEducation = new UserEducationModel($educationid, "", "", "", "");
         
@@ -270,7 +270,7 @@ class UserEducationController extends Controller
         
         // If flag is an int, returns error page
         if (is_int($flag)) {
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
             $data = [
                 'process' => "Get Education",
                 'back' => "getProfile"
@@ -281,7 +281,7 @@ class UserEducationController extends Controller
         // Returns user education
         $education = $flag;
         
-        Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $education);
+        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $education);
         return $education;
     }
 }

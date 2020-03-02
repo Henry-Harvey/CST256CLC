@@ -4,7 +4,7 @@ namespace App\Models\Services\Business;
 use App\Models\Objects\UserSkillModel;
 use App\Models\Services\Data\UserSkillDataService;
 use App\Models\Utility\DatabaseModel;
-use Illuminate\Support\Facades\Log;
+use App\Models\Utility\Logger;
 
 
 class UserSkillBusinessService
@@ -22,7 +22,7 @@ class UserSkillBusinessService
      */
     function createSkill($newUserSkill)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $newUserSkill);
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $newUserSkill);
         
         // Creates a new database model and gets the database from it
         $Database = new DatabaseModel();
@@ -37,7 +37,7 @@ class UserSkillBusinessService
         $db = null;
         
         // Returns flag
-        Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
+        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
         return $flag;
     }
     
@@ -54,7 +54,7 @@ class UserSkillBusinessService
      */
     function getSkill($partialSkill)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $partialSkill);
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $partialSkill);
         
         // Creates a new database model and gets the database from it
         $Database = new DatabaseModel();
@@ -69,7 +69,7 @@ class UserSkillBusinessService
         $db = null;
         
         // Returns flag
-        Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
+        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
         return $flag;
     }
     
@@ -86,7 +86,7 @@ class UserSkillBusinessService
      */
     function getAllSkillsForUser($user)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $user);
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $user);
         
         // Creates a new database model and gets the database from it
         $Database = new DatabaseModel();
@@ -101,7 +101,7 @@ class UserSkillBusinessService
         $db = null;
         
         // Returns flag
-        Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . implode($flag));
+        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . implode($flag));
         return $flag;
     }
     
@@ -118,7 +118,7 @@ class UserSkillBusinessService
      */
     function editSkill($updatedSkill)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $updatedSkill);
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $updatedSkill);
         
         // Creates a new database model and gets the database from it
         $Database = new DatabaseModel();
@@ -133,7 +133,7 @@ class UserSkillBusinessService
         $db = null;
         
         // Returns flag
-        Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
+        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
         return $flag;
     }
     
@@ -150,7 +150,7 @@ class UserSkillBusinessService
      */
     function remove($partialSkill)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $partialSkill);
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $partialSkill);
         
         // Creates a new database model and gets the database from it
         $Database = new DatabaseModel();
@@ -165,7 +165,7 @@ class UserSkillBusinessService
         $db = null;
         
         // Returns flag
-        Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
+        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
         return $flag;
     }
 }

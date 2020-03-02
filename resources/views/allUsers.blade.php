@@ -21,9 +21,9 @@
 				<th>Role</th>
 				<th>Username</th>
 				<th>Password</th>
-				<th>View</th>
-				<th>Suspend</th>
-				<th>Delete</th>
+				<th></th>
+				<th></th>
+				<th></th>
 			</tr>
 
 		</thead>

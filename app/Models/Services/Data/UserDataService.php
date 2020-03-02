@@ -3,7 +3,7 @@ namespace App\Models\Services\Data;
 
 use App\Models\Objects\UserModel;
 use App\Models\Utility\DatabaseException;
-use Illuminate\Support\Facades\Log;
+use App\Models\Utility\Logger;
 use PDO;
 use PDOException;
 
@@ -23,7 +23,7 @@ class UserDataService implements DataServiceInterface
      */
     function create($user)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $user);
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $user);
         try {
             $first_name = $user->getFirst_name();
             $last_name = $user->getLast_name();
@@ -42,13 +42,13 @@ class UserDataService implements DataServiceInterface
             $stmt->bindParam(':credentials_id', $credentials_id);
             $stmt->execute();
 
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $stmt->rowCount() . " row(s) affected");
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $stmt->rowCount() . " row(s) affected");
             return $stmt->rowCount();
         } catch (PDOException $e) {
-            Log::error("Exception ", array(
+            Logger::error("Exception ", array(
                 "message" => $e->getMessage()
             ));
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with exception");
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with exception");
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
     }
@@ -59,7 +59,7 @@ class UserDataService implements DataServiceInterface
      */
     function read($user)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $user);
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $user);
         try {
             $id = $user->getId();
 
@@ -70,7 +70,7 @@ class UserDataService implements DataServiceInterface
             $stmt->execute();
 
             if ($stmt->rowCount() != 1) {
-                Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $stmt->rowCount() . " row(s) found");
+                Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $stmt->rowCount() . " row(s) found");
                 return $stmt->rowCount();
             }
 
@@ -86,13 +86,13 @@ class UserDataService implements DataServiceInterface
 
             $u = new UserModel($id, $first_name, $last_name, $location, $summary, $role, $credentials_id);
 
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $u . " and " . $stmt->rowCount() . " row(s) found");
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $u . " and " . $stmt->rowCount() . " row(s) found");
             return $u;
         } catch (PDOException $e) {
-            Log::error("Exception ", array(
+            Logger::error("Exception ", array(
                 "message" => $e->getMessage()
             ));
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with exception");
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with exception");
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
     }
@@ -103,7 +103,7 @@ class UserDataService implements DataServiceInterface
      */
     function readAll()
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         try {
             $stmt = $this->db->prepare('SELECT * FROM users');
             $stmt->execute();
@@ -122,13 +122,13 @@ class UserDataService implements DataServiceInterface
 
                 array_push($user_array, $user);
             }
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with UserModel array and " . $stmt->rowCount() . " row(s) found");
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with UserModel array and " . $stmt->rowCount() . " row(s) found");
             return $user_array;
         } catch (PDOException $e) {
-            Log::error("Exception ", array(
+            Logger::error("Exception ", array(
                 "message" => $e->getMessage()
             ));
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with exception");
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with exception");
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
     }
@@ -139,7 +139,7 @@ class UserDataService implements DataServiceInterface
      */
     function update($user)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $user);
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $user);
         try {
             $firstname = $user->getFirst_name();
             $lastname = $user->getLast_name();
@@ -160,13 +160,13 @@ class UserDataService implements DataServiceInterface
             $stmt->bindParam(':id', $id);
             $stmt->execute();
 
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $stmt->rowCount() . " row(s) affected");
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $stmt->rowCount() . " row(s) affected");
             return $stmt->rowCount();
         } catch (PDOException $e) {
-            Log::error("Exception ", array(
+            Logger::error("Exception ", array(
                 "message" => $e->getMessage()
             ));
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with exception");
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with exception");
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
     }
@@ -177,7 +177,7 @@ class UserDataService implements DataServiceInterface
      */
     function delete($user)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $user);
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $user);
         try {
             $id = $user->getId();
 
@@ -186,13 +186,13 @@ class UserDataService implements DataServiceInterface
             $stmt->bindParam(':id', $id);
             $stmt->execute();
 
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $stmt->rowCount() . " row(s) affected");
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $stmt->rowCount() . " row(s) affected");
             return $stmt->rowCount();
         } catch (PDOException $e) {
-            Log::error("Exception ", array(
+            Logger::error("Exception ", array(
                 "message" => $e->getMessage()
             ));
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with exception");
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with exception");
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
     }

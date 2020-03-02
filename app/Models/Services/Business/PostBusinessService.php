@@ -2,7 +2,7 @@
 namespace App\Models\Services\Business;
 
 use App\Models\Utility\DatabaseModel;
-use Illuminate\Support\Facades\Log;
+use App\Models\Utility\Logger;
 use App\Models\Services\Data\PostDataService;
 use App\Models\Services\Data\PostSkillDataService;
 
@@ -30,7 +30,7 @@ class PostBusinessService
      */
     function createPost($newPost)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $newPost);
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $newPost);
 
         // Creates a new database model and gets the database from it
         $Database = new DatabaseModel();
@@ -49,10 +49,10 @@ class PostBusinessService
 
         // If flag is -1, rollback, sets db to null, and returns the flag
         if ($flag == - 1) {
-            Log::info(substr(strrchr(__METHOD__, "\\"), 1) . " Rollback");
+            Logger::info(substr(strrchr(__METHOD__, "\\"), 1) . " Rollback");
             $db->rollBack();
             $db = null;
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
             return $flag;
         }
 
@@ -69,10 +69,10 @@ class PostBusinessService
             
             // If the flag2 is not equal to 1, rollback, sets db to null, and returns the flag
             if ($flag2 != 1) {
-                Log::info(substr(strrchr(__METHOD__, "\\"), 1) . " Rollback");
+                Logger::info(substr(strrchr(__METHOD__, "\\"), 1) . " Rollback");
                 $db->rollBack();
                 $db = null;
-                Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag2);
+                Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag2);
                 return $flag2;
             }
         }
@@ -83,7 +83,7 @@ class PostBusinessService
         $db = null;
 
         // Returns 1
-        Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with 1");
+        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with 1");
         return 1;
     }
 
@@ -106,7 +106,7 @@ class PostBusinessService
      */
     function getPost($partialPost)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $partialPost);
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $partialPost);
 
         // Creates a new database model and gets the database from it
         $Database = new DatabaseModel();
@@ -125,10 +125,10 @@ class PostBusinessService
 
         // If flag is an int, rollback, sets db to null, and returns the flag
         if (is_int($flag)) {
-            Log::info(substr(strrchr(__METHOD__, "\\"), 1) . " Rollback");
+            Logger::info(substr(strrchr(__METHOD__, "\\"), 1) . " Rollback");
             $db->rollBack();
             $db = null;
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
             return $flag;
         }
 
@@ -139,10 +139,10 @@ class PostBusinessService
 
         // If flag2 is an int, rollback, sets db to null, and returns the flag
         if (is_int($flag2)) {
-            Log::info(substr(strrchr(__METHOD__, "\\"), 1) . " Rollback");
+            Logger::info(substr(strrchr(__METHOD__, "\\"), 1) . " Rollback");
             $db->rollBack();
             $db = null;
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag2);
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag2);
             return $flag2;
         }
 
@@ -155,7 +155,7 @@ class PostBusinessService
         $db = null;
 
         // Returns found post
-        Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $post);
+        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $post);
         return $post;
     }
 
@@ -177,7 +177,7 @@ class PostBusinessService
      */
     function getAllPosts()
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
 
         // Creates a new database model and gets the database from it
         $Database = new DatabaseModel();
@@ -196,10 +196,10 @@ class PostBusinessService
 
         // If flag is empty, rollback, sets db to null, and returns the flag
         if (empty($flag)) {
-            Log::info(substr(strrchr(__METHOD__, "\\"), 1) . " Rollback");
+            Logger::info(substr(strrchr(__METHOD__, "\\"), 1) . " Rollback");
             $db->rollBack();
             $db = null;
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . implode($flag));
             return $flag;
         }
 
@@ -212,10 +212,10 @@ class PostBusinessService
 
             // If flag2 is empty, rollback, sets db to null, and returns the flag
             if (empty($flag2)) {
-                Log::info(substr(strrchr(__METHOD__, "\\"), 1) . " Rollback");
+                Logger::info(substr(strrchr(__METHOD__, "\\"), 1) . " Rollback");
                 $db->rollBack();
                 $db = null;
-                Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag2);
+                Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . implode($flag2));
                 return $flag2;
             }
 
@@ -230,7 +230,7 @@ class PostBusinessService
         $db = null;
 
         // Returns array of found posts
-        Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with PostModel array");
+        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with PostModel array");
         return $posts_array;
     }
 
@@ -255,7 +255,7 @@ class PostBusinessService
      */
     function editPost($updatedPost)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $updatedPost);
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $updatedPost);
 
         // Creates a new database model and gets the database from it
         $Database = new DatabaseModel();
@@ -284,10 +284,10 @@ class PostBusinessService
             
             // If flag3 is not equal to 1, rollback, sets db to null, and returns the flag
             if ($flag3 != 1) {
-                Log::info(substr(strrchr(__METHOD__, "\\"), 1) . " Rollback");
+                Logger::info(substr(strrchr(__METHOD__, "\\"), 1) . " Rollback");
                 $db->rollBack();
                 $db = null;
-                Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag3);
+                Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag3);
                 return $flag3;
             }
         }
@@ -295,10 +295,10 @@ class PostBusinessService
         
         // If flag and flag2 both equal 0, rollback, sets db to null, and returns 0
         if($flag == 0 && $flag2 == 0){
-            Log::info(substr(strrchr(__METHOD__, "\\"), 1) . " Rollback");
+            Logger::info(substr(strrchr(__METHOD__, "\\"), 1) . " Rollback");
             $db->rollBack();
             $db = null;
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with 0");
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with 0");
             return 0;
         }
 
@@ -307,7 +307,7 @@ class PostBusinessService
         $db = null;
 
         // Returns 1
-        Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with 1");
+        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with 1");
         return 1;
     }
 
@@ -331,7 +331,7 @@ class PostBusinessService
      */
     function remove($partialPost)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $partialPost);
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $partialPost);
 
         // Creates a new database model and gets the database from it
         $Database = new DatabaseModel();
@@ -352,10 +352,10 @@ class PostBusinessService
             
             // If flag is not 1, rollback, sets db to null, and returns the flag
             if ($flag != 1) {
-                Log::info(substr(strrchr(__METHOD__, "\\"), 1) . " Rollback");
+                Logger::info(substr(strrchr(__METHOD__, "\\"), 1) . " Rollback");
                 $db->rollBack();
                 $db = null;
-                Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
+                Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
                 return $flag;
             }
         }
@@ -367,10 +367,10 @@ class PostBusinessService
 
         // If flag2 is not 1, rollback, sets db to null, and returns the flag
         if ($flag2 != 1) {
-            Log::info(substr(strrchr(__METHOD__, "\\"), 1) . " Rollback");
+            Logger::info(substr(strrchr(__METHOD__, "\\"), 1) . " Rollback");
             $db->rollBack();
             $db = null;
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag2);
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag2);
             return $flag2;
         }
 
@@ -379,7 +379,7 @@ class PostBusinessService
         $db = null;
 
         // Returns flag2
-        Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag2);
+        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag2);
         return $flag2;
     }
 }

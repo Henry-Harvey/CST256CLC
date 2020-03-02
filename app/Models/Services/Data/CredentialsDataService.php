@@ -2,8 +2,8 @@
 namespace App\Models\Services\Data;
 
 use App\Models\Objects\CredentialsModel;
+use App\Models\Utility\Logger;
 use App\Models\Utility\DatabaseException;
-use Illuminate\Support\Facades\Log;
 use PDO;
 use PDOException;
 use App\Models\Objects\UserModel;
@@ -24,7 +24,7 @@ class CredentialsDataService implements DataServiceInterface
      */
     function create($credentials)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $credentials);
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $credentials);
         try {
             // check if username already exists
             $username = $credentials->getUsername();
@@ -35,7 +35,7 @@ class CredentialsDataService implements DataServiceInterface
             $stmt->execute();
 
             if ($stmt->rowCount() > 0) {
-                Log::info("/Exiting  CredentialsDataService.create() with -1. Username already exists");
+                Logger::info("/Exiting  CredentialsDataService.create() with -1. Username already exists");
                 return - 1;
             }
 
@@ -51,17 +51,17 @@ class CredentialsDataService implements DataServiceInterface
 
             if ($stmt2->rowCount() != 0) {
                 $insertId = $this->db->lastInsertId();
-                Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with insertId:" . $insertId . " and " . $stmt2->rowCount() . " row(s) affected");
+                Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with insertId:" . $insertId . " and " . $stmt2->rowCount() . " row(s) affected");
                 return $insertId;
             } else {
-                Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with -1. " . $stmt2->rowCount() . " row(s) affected");
+                Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with -1. " . $stmt2->rowCount() . " row(s) affected");
                 return -1;
             }
         } catch (PDOException $e) {
-            Log::error("Exception ", array(
+            Logger::error("Exception ", array(
                 "message" => $e->getMessage()
             ));
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with exception");
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with exception");
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
     }
@@ -72,7 +72,7 @@ class CredentialsDataService implements DataServiceInterface
      */
     function read($credentials)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $credentials);
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $credentials);
         try {
             $id = $credentials->getId();
             $stmt = $this->db->prepare('SELECT * FROM credentials
@@ -82,7 +82,7 @@ class CredentialsDataService implements DataServiceInterface
             $stmt->execute();
 
             if ($stmt->rowCount() != 1) {
-                Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $stmt->rowCount() . " row(s) found");
+                Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $stmt->rowCount() . " row(s) found");
                 return $stmt->rowCount();
             }
 
@@ -93,13 +93,13 @@ class CredentialsDataService implements DataServiceInterface
 
             $credentials = new CredentialsModel($id, $username, $password, $suspended);
 
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $credentials . " and " . $stmt->rowCount() . " row(s) found");
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $credentials . " and " . $stmt->rowCount() . " row(s) found");
             return $credentials;
         } catch (PDOException $e) {
-            Log::error("Exception ", array(
+            Logger::error("Exception ", array(
                 "message" => $e->getMessage()
             ));
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with exception");
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with exception");
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
     }
@@ -114,7 +114,7 @@ class CredentialsDataService implements DataServiceInterface
      */
     function update($credentials)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $credentials);
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $credentials);
         try {
             $username = $credentials->getUsername();
             $password = $credentials->getPassword();
@@ -132,13 +132,13 @@ class CredentialsDataService implements DataServiceInterface
             $stmt->bindParam(':id', $id);
             $stmt->execute();
 
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $stmt->rowCount() . " row(s) affected");
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $stmt->rowCount() . " row(s) affected");
             return $stmt->rowCount();
         } catch (PDOException $e) {
-            Log::error("Exception ", array(
+            Logger::error("Exception ", array(
                 "message" => $e->getMessage()
             ));
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with exception");
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with exception");
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
     }
@@ -149,7 +149,7 @@ class CredentialsDataService implements DataServiceInterface
      */
     function delete($credentials)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $credentials);
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $credentials);
         try {
             $id = $credentials->getId();
 
@@ -158,13 +158,13 @@ class CredentialsDataService implements DataServiceInterface
             $stmt->bindParam(':id', $id);
             $stmt->execute();
 
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $stmt->rowCount() . " row(s) affected");
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $stmt->rowCount() . " row(s) affected");
             return $stmt->rowCount();
         } catch (PDOException $e) {
-            Log::error("Exception ", array(
+            Logger::error("Exception ", array(
                 "message" => $e->getMessage()
             ));
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with exception");
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with exception");
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
     }
@@ -194,7 +194,7 @@ class CredentialsDataService implements DataServiceInterface
      */
     function authenticate($credentials)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $credentials);
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $credentials);
         try {
             $username = $credentials->getUsername();
             $password = $credentials->getPassword();
@@ -207,14 +207,14 @@ class CredentialsDataService implements DataServiceInterface
             $stmt->execute();
 
             if ($stmt->rowCount() != 1) {
-                Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $stmt->rowCount() . " row(s) found");
+                Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $stmt->rowCount() . " row(s) found");
                 return $stmt->rowCount();
             }
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
             $suspended = $result['SUSPENDED'];
             if ($suspended != 0) {
-                Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with -1. Account suspended.");
+                Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with -1. Account suspended.");
                 return - 1;
             }
 
@@ -234,13 +234,13 @@ class CredentialsDataService implements DataServiceInterface
             $credentials_id = $result2['CREDENTIALS_ID'];
             $user = new UserModel($id, $first_name, $last_name, $location, $summary, $role, $credentials_id);
 
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $stmt->rowCount() . " row(s) found and " . $user);
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $stmt->rowCount() . " row(s) found and " . $user);
             return $user;
         } catch (PDOException $e) {
-            Log::error("Exception ", array(
+            Logger::error("Exception ", array(
                 "message" => $e->getMessage()
             ));
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with exception");
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with exception");
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
     }

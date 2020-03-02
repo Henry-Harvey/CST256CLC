@@ -22,8 +22,8 @@
 				<th>Location</th>
 				<th>Description</th>
 				@if(Session::get('sp')->getRole() != 0)
-				<th>Edit</th>
-				<th>Delete</th>
+				<th></th>
+				<th></th>
 				@endif
 				
 			</tr>

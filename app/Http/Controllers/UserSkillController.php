@@ -5,7 +5,7 @@ use App\Models\Objects\UserSkillModel;
 use App\Models\Services\Business\UserSkillBusinessService;
 use App\Models\Utility\ValidationRules;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use App\Models\Utility\Logger;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\ValidationException;
 use Exception;
@@ -29,7 +29,7 @@ class UserSkillController extends Controller
      */
     public function onCreateUserSkill(Request $request)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         try {
             // Creates a ValidationRules and validates the request with the user skill rules
             $vr = new ValidationRules();
@@ -50,7 +50,7 @@ class UserSkillController extends Controller
 
             // If flag equals 0, returns error page
             if ($flag == 0) {
-                Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
+                Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
                 $data = [
                     'process' => "Create Skill",
                     'back' => "createUserSkill"
@@ -60,18 +60,18 @@ class UserSkillController extends Controller
             
             // Creates a new account controller and returns its onGetProfile method
             $c = new AccountController();
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
             return $c->onGetProfile();
         } catch (ValidationException $e2) {
             throw $e2;
         } catch (Exception $e) {
-            Log::error("Exception ", array(
+            Logger::error("Exception ", array(
                 "message" => $e->getMessage()
             ));
             $data = [
                 'errorMsg' => $e->getMessage()
             ];
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
             return view('exception')->with($data);
         }
     }
@@ -87,7 +87,7 @@ class UserSkillController extends Controller
      */
     public function onGetEditUserSkill(Request $request)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         try {
             // Sets a userSkill equal to this method's getUserSkillFromId method, using the request input
             $userSkillToEdit = $this->getUserSkillFromId($request->input('idToEdit'));
@@ -96,16 +96,16 @@ class UserSkillController extends Controller
             $data = [
                 'userSkillToEdit' => $userSkillToEdit
             ];
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to editUserSkill view");
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to editUserSkill view");
             return view('editUserSkill')->with($data);
         } catch (Exception $e) {
-            Log::error("Exception ", array(
+            Logger::error("Exception ", array(
                 "message" => $e->getMessage()
             ));
             $data = [
                 'errorMsg' => $e->getMessage()
             ];
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
             return view('exception')->with($data);
         }
     }
@@ -126,7 +126,7 @@ class UserSkillController extends Controller
      */
     public function onEditUserSkill(Request $request)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         try {
             // Creates a ValidationRules and validates the request with the user skill rules
             $vr = new ValidationRules();
@@ -148,7 +148,7 @@ class UserSkillController extends Controller
             
             // If flag is is not equal to 1, returns error page
             if ($flag != 1) {
-                Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
+                Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
                 $data = [
                     'process' => "Edit UserSkill",
                     'back' => "getProfile"
@@ -158,19 +158,19 @@ class UserSkillController extends Controller
             
             // Creates a new account controller and returns its onGetProfile method
             $c = new AccountController();
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
             return $c->onGetProfile();
         } catch (ValidationException $e2) {
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with validation error");
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with validation error");
             throw $e2;
         } catch (Exception $e) {
-            Log::error("Exception ", array(
+            Logger::error("Exception ", array(
                 "message" => $e->getMessage()
             ));
             $data = [
                 'errorMsg' => $e->getMessage()
             ];
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
             return view('exception')->with($data);
         }
     }
@@ -186,7 +186,7 @@ class UserSkillController extends Controller
      */
     public function onTryDeleteUserSkill(Request $request)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         
         // Sets a user skill equal to this method's getUserSkillFromId method, using the request input
         $skill = $this->getUserSkillFromId($request->input('idToDelete'));
@@ -195,7 +195,7 @@ class UserSkillController extends Controller
         $data = [
             'skillToDelete' => $skill
         ];       
-        Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to tryDeleteUserSkill view");
+        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to tryDeleteUserSkill view");
         return view('tryDeleteUserSkill')->with($data);
     }
     
@@ -213,7 +213,7 @@ class UserSkillController extends Controller
      */
     public function onDeleteUserSkill(Request $request)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         
         // Sets a user skill equal to this method's getUserSkillFromId method, using the request input
         $skill = $this->getUserSkillFromId($request->input('idToDelete'));
@@ -227,7 +227,7 @@ class UserSkillController extends Controller
         
         // If flag is not equal to 1, returns error page
         if ($flag != 1) {
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
             $data = [
                 'process' => "Delete UserSkill",
                 'back' => "getProfile"
@@ -237,7 +237,7 @@ class UserSkillController extends Controller
         
         // Creates a new account controller and returns its onGetProfile method
         $c = new AccountController();
-        Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
+        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
         return $c->onGetProfile();
     }
     
@@ -254,7 +254,7 @@ class UserSkillController extends Controller
      */
     private function getUserSkillFromId($skillid)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         // Creates a user skill with the id
         $partialUserSkill = new UserSkillModel($skillid, "", "", "", "");
         
@@ -267,7 +267,7 @@ class UserSkillController extends Controller
         
         // If flag is an int, returns error page
         if (is_int($flag)) {
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
             $data = [
                 'process' => "Get Skill",
                 'back' => "getProfile"
@@ -277,7 +277,7 @@ class UserSkillController extends Controller
         
         // Returns user skill
         $skill = $flag;       
-        Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $skill);
+        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $skill);
         return $skill;
     }
 }

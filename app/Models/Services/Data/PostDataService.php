@@ -2,7 +2,7 @@
 namespace App\Models\Services\Data;
 
 use App\Models\Utility\DatabaseException;
-use Illuminate\Support\Facades\Log;
+use App\Models\Utility\Logger;
 use PDO;
 use PDOException;
 use App\Models\Objects\PostModel;
@@ -23,7 +23,7 @@ class PostDataService implements DataServiceInterface
      */
     function create($post)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $post);
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $post);
         try {
 
             $title = $post->getTitle();
@@ -41,18 +41,18 @@ class PostDataService implements DataServiceInterface
             $stmt->execute();
 
             if ($stmt->rowCount() != 1) {
-                Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with -1. " . $stmt->rowCount() . " row(s) affected");
+                Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with -1. " . $stmt->rowCount() . " row(s) affected");
                 return -1;
             }
 
             $insertId = $this->db->lastInsertId();
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with insertId:" . $insertId . " and " . $stmt->rowCount() . " row(s) affected");
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with insertId:" . $insertId . " and " . $stmt->rowCount() . " row(s) affected");
             return $insertId;
         } catch (PDOException $e) {
-            Log::error("Exception ", array(
+            Logger::error("Exception ", array(
                 "message" => $e->getMessage()
             ));
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with exception");
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with exception");
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
     }
@@ -63,7 +63,7 @@ class PostDataService implements DataServiceInterface
      */
     function read($post)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $post);
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $post);
         try {
             $id = $post->getId();
             $stmt = $this->db->prepare('SELECT * FROM posts
@@ -73,7 +73,7 @@ class PostDataService implements DataServiceInterface
             $stmt->execute();
 
             if ($stmt->rowCount() != 1) {
-                Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $stmt->rowCount() . " row(s) found");
+                Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $stmt->rowCount() . " row(s) found");
                 return $stmt->rowCount();
             }
 
@@ -85,13 +85,13 @@ class PostDataService implements DataServiceInterface
 
             $post = new PostModel($id, $title, $company, $location, $description);
 
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $post . " and " . $stmt->rowCount() . " row(s) found");
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $post . " and " . $stmt->rowCount() . " row(s) found");
             return $post;
         } catch (PDOException $e) {
-            Log::error("Exception ", array(
+            Logger::error("Exception ", array(
                 "message" => $e->getMessage()
             ));
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with exception");
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with exception");
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
     }
@@ -102,7 +102,7 @@ class PostDataService implements DataServiceInterface
      */
     function readAll()
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         try {
             $stmt = $this->db->prepare('SELECT * FROM posts');
             $stmt->execute();
@@ -119,13 +119,13 @@ class PostDataService implements DataServiceInterface
 
                 array_push($post_array, $post);
             }
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with PostModel array and " . $stmt->rowCount() . " row(s) found");
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with PostModel array and " . $stmt->rowCount() . " row(s) found");
             return $post_array;
         } catch (PDOException $e) {
-            Log::error("Exception ", array(
+            Logger::error("Exception ", array(
                 "message" => $e->getMessage()
             ));
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with exception");
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with exception");
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
     }
@@ -136,7 +136,7 @@ class PostDataService implements DataServiceInterface
      */
     function update($post)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $post);
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $post);
         try {
             $title = $post->getTitle();
             $company = $post->getCompany();
@@ -157,13 +157,13 @@ class PostDataService implements DataServiceInterface
             $stmt->bindParam(':id', $id);
             $stmt->execute();
 
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $stmt->rowCount() . " row(s) affected");
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $stmt->rowCount() . " row(s) affected");
             return $stmt->rowCount();
         } catch (PDOException $e) {
-            Log::error("Exception ", array(
+            Logger::error("Exception ", array(
                 "message" => $e->getMessage()
             ));
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with exception");
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with exception");
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
     }
@@ -174,7 +174,7 @@ class PostDataService implements DataServiceInterface
      */
     function delete($post)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $post);
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $post);
         try {
             $id = $post->getId();
 
@@ -183,13 +183,13 @@ class PostDataService implements DataServiceInterface
             $stmt->bindParam(':id', $id);
             $stmt->execute();
 
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $stmt->rowCount() . " row(s) affected");
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $stmt->rowCount() . " row(s) affected");
             return $stmt->rowCount();
         } catch (PDOException $e) {
-            Log::error("Exception ", array(
+            Logger::error("Exception ", array(
                 "message" => $e->getMessage()
             ));
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with exception");
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with exception");
             throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
         }
     }

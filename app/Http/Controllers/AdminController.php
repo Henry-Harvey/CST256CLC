@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Objects\UserModel;
 use App\Models\Services\Business\AccountBusinessService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use App\Models\Utility\Logger;
 use Illuminate\Support\Facades\Session;
 use Exception;
 use App\Models\Services\Business\UserJobBusinessService;
@@ -24,7 +24,7 @@ class AdminController extends Controller
      */
     public function onGetAllUsers()
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         try {
             // Creates an account business service
             $bs = new AccountBusinessService();
@@ -35,7 +35,7 @@ class AdminController extends Controller
 
             // If flag is empty, return error page
             if (empty($flag)) {
-                Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
+                Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
                 $data = [
                     'process' => "Get All Users",
                     'back' => "home"
@@ -47,16 +47,16 @@ class AdminController extends Controller
             $data = [
                 'allUsers_array' => $flag
             ];
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to allUsers view");
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to allUsers view");
             return view('allUsers')->with($data);
         } catch (Exception $e) {
-            Log::error("Exception ", array(
+            Logger::error("Exception ", array(
                 "message" => $e->getMessage()
             ));
             $data = [
                 'errorMsg' => $e->getMessage()
             ];
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
             return view('exception')->with($data);
         }
     }
@@ -73,7 +73,7 @@ class AdminController extends Controller
      */
     public function onGetOtherProfile(Request $request)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         try {
             // Sets a user equal to this method's getUserFromId method, using the request input
             $user = $this->getUserFromId($request->input('idToShow'));
@@ -96,16 +96,16 @@ class AdminController extends Controller
                 'userSkill_array' => $userSkill_array,
                 'userEducation_array' => $userEducation_array
             ];
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to profile view");
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to profile view");
             return view('profile')->with($data);
         } catch (Exception $e) {
-            Log::error("Exception ", array(
+            Logger::error("Exception ", array(
                 "message" => $e->getMessage()
             ));
             $data = [
                 'errorMsg' => $e->getMessage()
             ];
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
             return view('exception')->with($data);
         }
     }
@@ -121,7 +121,7 @@ class AdminController extends Controller
      */
     public function onTryDeleteUser(Request $request)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
 
         // Sets a user equal to this method's getUserFromId method, using the request input
         $user = $this->getUserFromId($request->input('idToDelete'));
@@ -130,7 +130,7 @@ class AdminController extends Controller
         $data = [
             'userToDelete' => $user
         ];
-        Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to tryDeleteUser view");
+        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to tryDeleteUser view");
         return view('tryDeleteUser')->with($data);
     }
 
@@ -148,7 +148,7 @@ class AdminController extends Controller
      */
     public function onDeleteUser(Request $request)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
 
         // Sets a user equal to this method's getUserFromId method, using the request input
         $user = $this->getUserFromId($request->input('idToDelete'));
@@ -162,7 +162,7 @@ class AdminController extends Controller
         
         // If flag is 0, returns error page
         if ($flag == 0) {
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
             $data = [
                 'process' => "Remove User",
                 'back' => "getAllUsers"
@@ -171,7 +171,7 @@ class AdminController extends Controller
         }
 
         // Returns this method's onGetAllUsers method
-        Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
+        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
         return $this->onGetAllUsers();
     }
 
@@ -186,7 +186,7 @@ class AdminController extends Controller
      */
     public function onTryToggleSuspension(Request $request)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
 
         // Sets a user equal to this method's getUserFromId method, using the request input
         $user = $this->getUserFromId($request->input('idToToggle'));
@@ -195,7 +195,7 @@ class AdminController extends Controller
         $data = [
             'userToToggle' => $user
         ];
-        Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to tryToggleSuspension view");
+        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to tryToggleSuspension view");
         return view('tryToggleSuspension')->with($data);
     }
 
@@ -213,7 +213,7 @@ class AdminController extends Controller
      */
     public function onToggleSuspension(Request $request)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
 
         // Sets a user equal to this method's getUserFromId method, using the request input
         $user = $this->getUserFromId($request->input('idToToggle'));
@@ -227,7 +227,7 @@ class AdminController extends Controller
         
         // If flag is 0, returns error page
         if ($flag == 0) {
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
             $data = [
                 'process' => "Toggle Suspend User",
                 'back' => "getAllUsers"
@@ -236,13 +236,13 @@ class AdminController extends Controller
         }
 
         // Returns this method's onGetAllUsers method
-        Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . "with " . $flag);
+        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . "with " . $flag);
         return $this->onGetAllUsers();
     }
     
     private function getUserFromSession()
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         $userid = Session::get('sp')->getUser_id();
         $partialUser = new UserModel($userid, "", "", "", "", 0, 0);
         $bs = new AccountBusinessService();
@@ -251,7 +251,7 @@ class AdminController extends Controller
         $flag = $bs->getUser($partialUser);
         
         if (is_int($flag)) {
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
             $data = [
                 'process' => "Get User",
                 'back' => "home"
@@ -261,7 +261,7 @@ class AdminController extends Controller
         
         $user = $flag;
         
-        Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $user);
+        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $user);
         return $user;
     }
     
@@ -278,7 +278,7 @@ class AdminController extends Controller
      */
     private function getUserFromId($userid)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         // Creates a user with the id
         $partialUser = new UserModel($userid, "", "", "", "", 0, 0);
         // Creates an account business service
@@ -290,7 +290,7 @@ class AdminController extends Controller
         
         // If flag is an int, returns error page
         if (is_int($flag)) {
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
             $data = [
                 'process' => "Get User",
                 'back' => "home"
@@ -301,7 +301,7 @@ class AdminController extends Controller
         $user = $flag;
         
         // Returns user
-        Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $user);
+        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $user);
         return $user;
     }
 

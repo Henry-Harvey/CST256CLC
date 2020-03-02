@@ -1,7 +1,7 @@
 <?php
 namespace App\Models\Services\Business;
 
-use Illuminate\Support\Facades\Log;
+use App\Models\Utility\Logger;
 use App\Models\Objects\UserEducationModel;
 use App\Models\Services\Data\UserEducationDataService;
 use App\Models\Utility\DatabaseModel;
@@ -22,7 +22,7 @@ class UserEducationBusinessService
      */
     function createEducation($newUserEducation)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $newUserEducation);
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $newUserEducation);
 
         // Creates a new database model and gets the database from it
         $Database = new DatabaseModel();
@@ -37,7 +37,7 @@ class UserEducationBusinessService
         $db = null;
         
         // Returns flag
-        Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
+        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
         return $flag;
     }
     
@@ -54,7 +54,7 @@ class UserEducationBusinessService
      */
     function getEducation($partialEducation)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $partialEducation);
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $partialEducation);
         
         // Creates a new database model and gets the database from it
         $Database = new DatabaseModel();
@@ -69,7 +69,7 @@ class UserEducationBusinessService
         $db = null;
         
         // Returns flag
-        Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
+        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
         return $flag;
     }
     
@@ -86,7 +86,7 @@ class UserEducationBusinessService
      */
     function getAllEducationForUser($user)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $user);
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $user);
         
         // Creates a new database model and gets the database from it
         $Database = new DatabaseModel();
@@ -101,7 +101,7 @@ class UserEducationBusinessService
         $db = null;
         
         //Returns flag
-        Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . implode($flag));
+        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . implode($flag));
         return $flag;
     }
     
@@ -118,7 +118,7 @@ class UserEducationBusinessService
      */
     function editEducation($updatedEducation)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $updatedEducation);
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $updatedEducation);
         
         // Creates a new database model and gets the database from it
         $Database = new DatabaseModel();
@@ -133,7 +133,7 @@ class UserEducationBusinessService
         $db = null;
         
         // Returns flag
-        Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
+        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
         return $flag;
     }
     
@@ -150,7 +150,7 @@ class UserEducationBusinessService
      */
     function remove($partialEducation)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $partialEducation);
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $partialEducation);
         
         // Creates a new database model and gets the database from it
         $Database = new DatabaseModel();
@@ -165,7 +165,7 @@ class UserEducationBusinessService
         $db = null;
         
         // Returns flag
-        Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
+        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
         return $flag;
     }
 }

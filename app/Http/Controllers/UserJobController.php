@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Objects\UserJobModel;
 use App\Models\Utility\ValidationRules;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use App\Models\Utility\Logger;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\ValidationException;
 use Exception;
@@ -28,7 +28,7 @@ class UserJobController extends Controller
      */
     public function onCreateUserJob(Request $request)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         try {
             // Creates a ValidationRules and validates the request with the user job rules
             $vr = new ValidationRules();
@@ -51,7 +51,7 @@ class UserJobController extends Controller
 
             // If flag equals 0, returns error page
             if ($flag == 0) {
-                Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
+                Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
                 $data = [
                     'process' => "Create Job",
                     'back' => "createUserJob"
@@ -61,18 +61,18 @@ class UserJobController extends Controller
             
             // Creates a new account controller and returns its onGetProfile method
             $c = new AccountController();
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
             return $c->onGetProfile();
         } catch (ValidationException $e2) {
             throw $e2;
         } catch (Exception $e) {
-            Log::error("Exception ", array(
+            Logger::error("Exception ", array(
                 "message" => $e->getMessage()
             ));
             $data = [
                 'errorMsg' => $e->getMessage()
             ];
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
             return view('exception')->with($data);
         }
     }
@@ -88,7 +88,7 @@ class UserJobController extends Controller
      */
     public function onGetEditUserJob(Request $request)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         try {
             // Sets a userJob equal to this method's getUserJobFromId method, using the request input
             $userJobToEdit = $this->getUserJobFromId($request->input('idToEdit'));
@@ -97,16 +97,16 @@ class UserJobController extends Controller
             $data = [
                 'userJobToEdit' => $userJobToEdit
             ];
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to editUserJob view");
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to editUserJob view");
             return view('editUserJob')->with($data);
         } catch (Exception $e) {
-            Log::error("Exception ", array(
+            Logger::error("Exception ", array(
                 "message" => $e->getMessage()
             ));
             $data = [
                 'errorMsg' => $e->getMessage()
             ];
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
             return view('exception')->with($data);
         }
     }
@@ -127,7 +127,7 @@ class UserJobController extends Controller
      */
     public function onEditUserJob(Request $request)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         try {
             // Creates a ValidationRules and validates the request with the user job rules
             $vr = new ValidationRules();
@@ -151,7 +151,7 @@ class UserJobController extends Controller
             
             // If flag is is not equal to 1, returns error page
             if ($flag != 1) {
-                Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
+                Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
                 $data = [
                     'process' => "Edit UserJob",
                     'back' => "getProfile"
@@ -161,19 +161,19 @@ class UserJobController extends Controller
             
             // Creates a new account controller and returns its onGetProfile method
             $c = new AccountController();
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
             return $c->onGetProfile();
         } catch (ValidationException $e2) {
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with validation error");
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with validation error");
             throw $e2;
         } catch (Exception $e) {
-            Log::error("Exception ", array(
+            Logger::error("Exception ", array(
                 "message" => $e->getMessage()
             ));
             $data = [
                 'errorMsg' => $e->getMessage()
             ];
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
             return view('exception')->with($data);
         }
     }
@@ -189,7 +189,7 @@ class UserJobController extends Controller
      */
     public function onTryDeleteUserJob(Request $request)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         
         // Sets a user job equal to this method's getUserJobFromId method, using the request input
         $job = $this->getUserJobFromId($request->input('idToDelete'));
@@ -198,7 +198,7 @@ class UserJobController extends Controller
         $data = [
             'jobToDelete' => $job
         ];       
-        Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to tryDeleteUserJob view");
+        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to tryDeleteUserJob view");
         return view('tryDeleteUserJob')->with($data);
     }
     
@@ -216,7 +216,7 @@ class UserJobController extends Controller
      */
     public function onDeleteUserJob(Request $request)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         
         // Sets a user job equal to this method's getUserJobFromId method, using the request input
         $job = $this->getUserJobFromId($request->input('idToDelete'));
@@ -230,7 +230,7 @@ class UserJobController extends Controller
         
         // If flag is not equal to 1, returns error page
         if ($flag != 1) {
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
             $data = [
                 'process' => "Delete UserJob",
                 'back' => "getProfile"
@@ -240,7 +240,7 @@ class UserJobController extends Controller
         
         // Creates a new account controller and returns its onGetProfile method
         $c = new AccountController();
-        Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
+        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
         return $c->onGetProfile();
     }
        
@@ -257,7 +257,7 @@ class UserJobController extends Controller
      */
     private function getUserJobFromId($jobid)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         // Creates a user job with the id
         $partialUserJob = new UserJobModel($jobid, "", "", "", "");
         
@@ -270,7 +270,7 @@ class UserJobController extends Controller
         
         // If flag is an int, returns error page
         if (is_int($flag)) {
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
             $data = [
                 'process' => "Get Job",
                 'back' => "getProfile"
@@ -280,7 +280,7 @@ class UserJobController extends Controller
         
         // Returns user job
         $job = $flag;
-        Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $job);
+        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $job);
         return $job;
     }
     

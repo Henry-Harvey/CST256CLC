@@ -3,7 +3,7 @@ namespace App\Models\Services\Business;
 
 use App\Models\Services\Data\UserDataService;
 use App\Models\Utility\DatabaseModel;
-use Illuminate\Support\Facades\Log;
+use App\Models\Utility\Logger;
 use App\Models\Services\Data\CredentialsDataService;
 use App\Models\Objects\CredentialsModel;
 
@@ -29,7 +29,7 @@ class AccountBusinessService
      */
     function register($newUser)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $newUser);
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $newUser);
 
         // Creates a new database model and gets the database from it
         $Database = new DatabaseModel();
@@ -47,10 +47,10 @@ class AccountBusinessService
 
         // If flag is -1, rollback, sets db to null, and returns the flag
         if ($flag == - 1) {
-            Log::info(substr(strrchr(__METHOD__, "\\"), 1) . " Rollback");
+            Logger::info(substr(strrchr(__METHOD__, "\\"), 1) . " Rollback");
             $db->rollBack();
             $db = null;
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
             return $flag;
         }
 
@@ -63,10 +63,10 @@ class AccountBusinessService
 
         // If the flag2 is not equal to 1, rollback, sets db to null, and returns the flag
         if ($flag2 != 1) {
-            Log::info(substr(strrchr(__METHOD__, "\\"), 1) . " Rollback");
+            Logger::info(substr(strrchr(__METHOD__, "\\"), 1) . " Rollback");
             $db->rollBack();
             $db = null;
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag2);
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag2);
             return $flag2;
         }
 
@@ -75,7 +75,7 @@ class AccountBusinessService
         $db = null;
 
         // Returns flag2
-        Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag2);
+        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag2);
         return $flag2;
     }
 
@@ -99,7 +99,7 @@ class AccountBusinessService
      */
     function getUser($partialUser)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $partialUser);
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $partialUser);
 
         // Creates a new database model and gets the database from it
         $Database = new DatabaseModel();
@@ -117,10 +117,10 @@ class AccountBusinessService
 
         // If flag is an int, rollback, sets db to null, and returns the flag
         if (is_int($flag)) {
-            Log::info(substr(strrchr(__METHOD__, "\\"), 1) . " Rollback");
+            Logger::info(substr(strrchr(__METHOD__, "\\"), 1) . " Rollback");
             $db->rollBack();
             $db = null;
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
             return $flag;
         }
 
@@ -133,10 +133,10 @@ class AccountBusinessService
 
         // If flag2 is an int, rollback, sets db to null, and returns the flag
         if (is_int($flag2)) {
-            Log::info(substr(strrchr(__METHOD__, "\\"), 1) . " Rollback");
+            Logger::info(substr(strrchr(__METHOD__, "\\"), 1) . " Rollback");
             $db->rollBack();
             $db = null;
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag2);
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag2);
             return $flag2;
         }
 
@@ -149,7 +149,7 @@ class AccountBusinessService
         $db = null;
 
         // Returns found user
-        Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $user);
+        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $user);
         return $user;
     }
 
@@ -172,7 +172,7 @@ class AccountBusinessService
      */
     function getAllUsers()
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
 
         // Creates a new database model and gets the database from it
         $Database = new DatabaseModel();
@@ -190,10 +190,10 @@ class AccountBusinessService
 
         // If flag is empty, rollback, sets db to null, and returns the flag
         if (empty($flag)) {
-            Log::info(substr(strrchr(__METHOD__, "\\"), 1) . " Rollback");
+            Logger::info(substr(strrchr(__METHOD__, "\\"), 1) . " Rollback");
             $db->rollBack();
             $db = null;
-            Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
             return $flag;
         }
 
@@ -208,10 +208,10 @@ class AccountBusinessService
 
             // If flag2 is an int, rollback, sets db to null, and returns the flag
             if (is_int($flag2)) {
-                Log::info(substr(strrchr(__METHOD__, "\\"), 1) . " Rollback");
+                Logger::info(substr(strrchr(__METHOD__, "\\"), 1) . " Rollback");
                 $db->rollBack();
                 $db = null;
-                Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag2);
+                Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag2);
                 return $flag2;
             }
 
@@ -226,7 +226,7 @@ class AccountBusinessService
         $db = null;
 
         // Returns array of found users
-        Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with UserModel array");
+        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with UserModel array");
         return $users_array;
     }
 
@@ -244,7 +244,7 @@ class AccountBusinessService
      */
     function editUser($updatedUser)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $updatedUser);
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $updatedUser);
 
         // Creates a new database model and gets the database from it
         $Database = new DatabaseModel();
@@ -260,7 +260,7 @@ class AccountBusinessService
         $db = null;
 
         // Returns flag
-        Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
+        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
         return $flag;
     }
 
@@ -282,7 +282,7 @@ class AccountBusinessService
      */
     function remove($deleteUser)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $deleteUser);
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $deleteUser);
 
         // Creates a new database model and gets the database from it
         $Database = new DatabaseModel();
@@ -307,7 +307,7 @@ class AccountBusinessService
             $flag3 = 1;
         } // Else rollback and set flag3 equal to 0
         else {
-            Log::info(substr(strrchr(__METHOD__, "\\"), 1) . " Rollback");
+            Logger::info(substr(strrchr(__METHOD__, "\\"), 1) . " Rollback");
             $db->rollBack();
             $flag3 = 0;
         }
@@ -316,7 +316,7 @@ class AccountBusinessService
         $db = null;
 
         // Returns flag3
-        Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag3);
+        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag3);
         return $flag3;
     }
 
@@ -334,7 +334,7 @@ class AccountBusinessService
      */
     function login($loginCredentials)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $loginCredentials);
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $loginCredentials);
 
         // Creates a new database model and gets the database from it
         $Database = new DatabaseModel();
@@ -350,7 +350,7 @@ class AccountBusinessService
         $db = null;
 
         // Returns flag
-        Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
+        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
         return $flag;
     }
 
@@ -371,7 +371,7 @@ class AccountBusinessService
      */
     function toggleSuspension($user)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $user);
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $user);
 
         // Creates a new database model and gets the database from it
         $Database = new DatabaseModel();
@@ -398,7 +398,7 @@ class AccountBusinessService
         $db = null;
 
         // Returns flag
-        Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
+        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
         return $flag;
     }
 }

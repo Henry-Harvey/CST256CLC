@@ -1,7 +1,7 @@
 <?php
 namespace App\Models\Services\Business;
 
-use Illuminate\Support\Facades\Log;
+use App\Models\Utility\Logger;
 use App\Models\Utility\DatabaseModel;
 use App\Models\Objects\UserJobModel;
 use App\Models\Services\Data\UserJobDataService;
@@ -21,7 +21,7 @@ class UserJobBusinessService
      */
     function createJob($newUserJob)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $newUserJob);
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $newUserJob);
 
         // Creates a new database model and gets the database from it
         $Database = new DatabaseModel();
@@ -36,7 +36,7 @@ class UserJobBusinessService
         $db = null;
         
         // Returns flag
-        Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
+        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
         return $flag;
     }
     
@@ -53,7 +53,7 @@ class UserJobBusinessService
      */
     function getJob($partialJob)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $partialJob);
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $partialJob);
         
         // Creates a new database model and gets the database from it
         $Database = new DatabaseModel();
@@ -68,7 +68,7 @@ class UserJobBusinessService
         $db = null;
         
         // Returns flag
-        Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
+        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
         return $flag;
     }
     
@@ -85,7 +85,7 @@ class UserJobBusinessService
      */
     function getAllJobsForUser($user)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $user);
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $user);
         
         // Creates a new database model and gets the database from it
         $Database = new DatabaseModel();
@@ -100,7 +100,7 @@ class UserJobBusinessService
         $db = null;
         
         // Returns flag
-        Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . implode($flag));
+        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . implode($flag));
         return $flag;
     }
     
@@ -117,7 +117,7 @@ class UserJobBusinessService
      */
     function editJob($updatedJob)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $updatedJob);
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $updatedJob);
         
         // Creates a new database model and gets the database from it
         $Database = new DatabaseModel();
@@ -133,7 +133,7 @@ class UserJobBusinessService
         $db = null;
         
         // Returns flag
-        Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
+        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
         return $flag;
     }
     
@@ -150,7 +150,7 @@ class UserJobBusinessService
      */
     function remove($partialJob)
     {
-        Log::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $partialJob);
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $partialJob);
         
         // Creates a new database model and gets the database from it
         $Database = new DatabaseModel();
@@ -165,7 +165,7 @@ class UserJobBusinessService
         $db = null;
         
         // Returns flag
-        Log::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
+        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
         return $flag;
     }
 }
