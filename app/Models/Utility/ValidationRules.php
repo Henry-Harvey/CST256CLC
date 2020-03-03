@@ -47,7 +47,7 @@ class ValidationRules
             'title' => 'Required | Between:1,15',
             'company' => 'Required | Between:1,15',
             'location' => 'Required | Between:1,15',
-            'description' => 'Required | Between:1,15',
+            'description' => 'Required | Between:1,75',
             'skill1' => 'Required | Between:1,15',
         ];
         return $rules;
@@ -78,6 +78,15 @@ class ValidationRules
             'school' => 'Required | Between:1,50',
             'degree' => 'Required | Between:1,50',
             'years' => 'Required | Between:1,50'
+        ];
+        return $rules;
+    }
+    
+    public function getGroupRules()
+    {
+        $rules = [
+            'title' => 'Required | Between:1,50',
+            'description' => 'Required | Between:1,75'
         ];
         return $rules;
     }

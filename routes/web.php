@@ -55,6 +55,10 @@ Route::get('/createUserEducation', function () {
     return view('newUserEducation');
 });
 
+Route::get('/getNewGroup', function () {
+    return view('newGroup');
+});
+
 /*
  * Account Controller Routes
  */
@@ -177,4 +181,11 @@ Route::post('/getEditUserEducation', 'UserEducationController@onGetEditUserEduca
 
 // Calls the user education controller edit post method from the editUserEducation view form
 Route::post('/processEditUserEducation', 'UserEducationController@onEditUserEducation');
-       
+
+/*
+ * Group Controller Routes
+ */
+
+Route::get('/getGroups', 'GroupController@onGetAllGroups');
+
+Route::post('/processCreateGroup', 'GroupController@onCreateGroup');
