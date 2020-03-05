@@ -6,12 +6,10 @@ use App\Models\Utility\Logger;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\ValidationException;
 use Exception;
-use App\Models\Services\Business\PostBusinessService;
 use App\Models\Utility\ValidationRules;
-use App\Models\Objects\PostModel;
-use App\Models\Objects\PostSkillModel;
 use App\Models\Services\Business\GroupBusinessService;
 use App\Models\Objects\GroupModel;
+use App\Models\Objects\Group_Has_UserModel;
 
 class GroupController extends Controller
 {
@@ -47,7 +45,7 @@ class GroupController extends Controller
             $description = $request->input('description');
 
             // Creates Post model from the variables
-            $group = new GroupModel(0, $title, $description, Session::get('sp')->getUser_id());
+            $group = new GroupModel("", $title, $description, Session::get('sp')->getUser_id());
 
             // Creates post business service
             $bs = new GroupBusinessService();
@@ -82,7 +80,42 @@ class GroupController extends Controller
             return view('exception')->with($data);
         }
     }
-
+    
+    public function onGetGroup(Request $request)
+    {
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        try {
+            $idToDisplay = $request->input('idToDisplay');
+            
+            // Calls getAllPosts bs method
+            // flag is array
+            $group = $this->getGroupFromId($idToDisplay);
+            
+            $userIsMember = false;
+            foreach ($group->getMembers_array() as $member){
+                if(Session::get('sp')->getUser_id() == $member->getId()){
+                    $userIsMember = true;
+                }
+            }
+            
+            $data = [
+                'group' => $group,
+                'userIsMember' => $userIsMember
+            ];
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to group view with " . $group);
+            return view('group')->with($data);
+        } catch (Exception $e) {
+            Logger::error("Exception ", array(
+                "message" => $e->getMessage()
+            ));
+            $data = [
+                'errorMsg' => $e->getMessage()
+            ];
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
+            return view('exception')->with($data);
+        }
+    }
+    
     /**
      * Create a post business service
      * Calls getAllPosts bs method
@@ -141,19 +174,19 @@ class GroupController extends Controller
      *            Implicit request
      * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory result view
      */
-    public function onGetEditPost(Request $request)
+    public function onGetEditGroup(Request $request)
     {
         Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         try {
             // Sets a post equal to this method's getPostFromId method, using the request input
-            $postToEdit = $this->getPostFromId($request->input('idToEdit'));
-
+            $GroupToEdit = $this->getGroupFromId($request->input('idToEdit'));
+            
             // Passes the post to editPost view
             $data = [
-                'postToEdit' => $postToEdit
+                'groupToEdit' => $GroupToEdit
             ];
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to editPost view");
-            return view('editPost')->with($data);
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to editGroup view");
+            return view('editGroup')->with($data);
         } catch (Exception $e) {
             Logger::error("Exception ", array(
                 "message" => $e->getMessage()
@@ -165,7 +198,7 @@ class GroupController extends Controller
             return view('exception')->with($data);
         }
     }
-
+    
     /**
      * Takes in a request from editPost form
      * Creates a ValidationRules and validates the request with the post edit rules
@@ -184,72 +217,44 @@ class GroupController extends Controller
      *            Implicit request
      * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory result view
      */
-    public function onEditPost(Request $request)
+    public function onEditGroup(Request $request)
     {
         Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         try {
             // Creates a ValidationRules and validates the request with the post edit rules
             $vr = new ValidationRules();
-            // $this->validate($request, $vr->getPostEditRules());
-
+            $this->validate($request, $vr->getGroupRules());
+            
             // Sets variables equal to request inputs
             $id = $request->input('id');
             $title = $request->input('title');
-            $company = $request->input('company');
-            $location = $request->input('location');
             $description = $request->input('description');
-
+            $owner_id = $request->input('owner_id');
+            
             // Creates a post model from the variables
-            $post = new PostModel($id, $title, $company, $location, $description);
-
-            // Creates an array for the post's skills
-            $postSkill_array = array();
-
-            // Creates a post skill from the first skill input and adds it to the array
-            $skill1 = $request->input('skill1');
-            $postSkill1 = new PostSkillModel(0, $skill1, $id);
-            array_push($postSkill_array, $postSkill1);
-
-            // If the other skill's requests were sent, create post skills from them and add them to the array
-            if ($request->input('skill2') != "") {
-                $skill2 = $request->input('skill2');
-                $postSkill2 = new PostSkillModel(0, $skill2, $id);
-                array_push($postSkill_array, $postSkill2);
-            }
-            if ($request->input('skill3') != "") {
-                $skill3 = $request->input('skill3');
-                $postSkill3 = new PostSkillModel(0, $skill3, $id);
-                array_push($postSkill_array, $postSkill3);
-            }
-            if ($request->input('skill4') != "") {
-                $skill4 = $request->input('skill4');
-                $postSkill4 = new PostSkillModel(0, $skill4, $id);
-                array_push($postSkill_array, $postSkill4);
-            }
-
-            // Set the post's skill array equal to the new array
-            $post->setPostSkill_array($postSkill_array);
-
+            $group = new GroupModel($id, $title, $description, $owner_id);
+            
+            
             // Creates a post business service
-            $bs = new PostBusinessService();
-
+            $bs = new GroupBusinessService();
+            
             // Calls the editPost bs method with the post
             // flag is rows affected
-            $flag = $bs->editPost($post);
-
+            $flag = $bs->editGroup($group);
+            
             // If flag is is not 1, returns error page
             if ($flag != 1) {
                 Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
                 $data = [
-                    'process' => "Edit Post",
-                    'back' => "getJobPostings"
+                    'process' => "Edit Group",
+                    'back' => "getGroups"
                 ];
                 return view('error')->with($data);
             }
-
+            
             // Returns this controller's getAllPosts method
             Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
-            return $this->onGetAllPosts();
+            return $this->onGetAllGroups();
         } catch (ValidationException $e2) {
             Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with validation error");
             throw $e2;
@@ -264,70 +269,136 @@ class GroupController extends Controller
             return view('exception')->with($data);
         }
     }
-
-    /**
-     * Takes in a request from allJobPostings view
-     * Sets a post equal to this method's getPostFromId method, using the request input
-     * Passes the post to the tryDeletePost view
-     *
-     * @param Request $request
-     *            Implicit request
-     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory result view
-     */
-    public function onTryDeletePost(Request $request)
+    
+    public function onGetTryDeleteGroup(Request $request)
     {
         Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
-
+        
         // Sets a post equal to this method's getPostFromId method, using the request input
-        $post = $this->getPostFromId($request->input('idToDelete'));
-
+        $idToDelete = $request->input('idToDelete');
+        
+        $groupToDelete = $this->getGroupFromId($idToDelete);
+        
         // Passes the post to the tryDeletePost view
         $data = [
-            'postToDelete' => $post
+            'groupToDelete' => $groupToDelete
         ];
-        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to tryDeletePost view");
-        return view('tryDeletePost')->with($data);
+        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to tryDeleteGroup view");
+        return view('tryDeleteGroup')->with($data);
     }
-
-    /**
-     * Takes in a request from tryDeletePost view
-     * Sets a post equal to this method's getPostFromId method, using the request input
-     * Creates a post business service
-     * Calls the remove bs method
-     * If flag is not equal to 1, returns error page
-     * Returns this method's onGetAllUsers method
-     *
-     * @param Request $request
-     *            Implicit request
-     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory result view
-     */
-    public function onDeletePost(Request $request)
+    
+    public function onDeleteGroup(Request $request)
     {
         Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
-
+        
         // Sets a post equal to this method's getPostFromId method, using the request input
-        $post = $this->getPostFromId($request->input('idToDelete'));
-
-        // Creates a post business service
-        $bs = new PostBusinessService();
-
-        // Calls the remove bs method
-        // flag is rows affected
-        $flag = $bs->remove($post);
-
-        // If flag is not equal to 1, returns error page
-        if ($flag != 1) {
+        $idToDelete = $request->input('idToDelete');
+        
+        $partialGroup = new GroupModel($idToDelete, "", "", "");
+        
+        $bs = new GroupBusinessService();
+        
+        $flag = $bs->removeGroup($partialGroup);
+        
+        if($flag != 1){
             Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
+            
             $data = [
-                'process' => "Delete Post",
-                'back' => "getJobPostings"
+                'process' => "Deleting Group",
+                'back' => "getGroups"
             ];
             return view('error')->with($data);
         }
-
-        // Returns this method's onGetAllUsers method
+        
         Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
-        return $this->onGetAllPosts();
+        return $this->onGetAllGroups();
+    }
+    
+    public function onGetTryJoinGroup(Request $request)
+    {
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        
+        // Sets a post equal to this method's getPostFromId method, using the request input
+        $group = $this->getGroupFromId($request->input('groupid'));
+        
+        // Passes the post to the tryDeletePost view
+        $data = [
+            'group' => $group
+        ];
+        Logger::info($group);
+        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to tryJoinGroup view");
+        return view('tryJoinGroup')->with($data);
+    }
+    
+    public function onJoinGroup(Request $request)
+    {
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        
+        // Sets a post equal to this method's getPostFromId method, using the request input
+        $userid = Session::get('sp')->getUser_id();
+        $groupid = $request->input('groupid');
+        
+        $group_has_user = new Group_Has_UserModel($groupid, $userid);
+        
+        $bs = new GroupBusinessService();
+        
+        $flag = $bs->join($group_has_user);
+        
+        if($flag != 1){
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
+            
+            $data = [
+                'process' => "Joining Group",
+                'back' => "getGroups"
+            ];           
+            return view('error')->with($data);
+        }
+        
+        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
+        return $this->onGetAllGroups();
+    }
+    
+    public function onGetTryLeaveGroup(Request $request)
+    {
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        
+        // Sets a post equal to this method's getPostFromId method, using the request input
+        $group = $this->getGroupFromId($request->input('groupid'));
+        
+        // Passes the post to the tryDeletePost view
+        $data = [
+            'group' => $group
+        ];
+        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to tryLeaveGroup view");
+        return view('tryLeaveGroup')->with($data);
+    }
+    
+    public function onLeaveGroup(Request $request)
+    {
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        
+        // Sets a post equal to this method's getPostFromId method, using the request input
+        $userid = Session::get('sp')->getUser_id();
+        $groupid = $request->input('groupid');
+        
+        $group_has_user = new Group_Has_UserModel($groupid, $userid);
+        
+        $bs = new GroupBusinessService();
+        
+        $flag = $bs->leave($group_has_user);
+        
+        if($flag != 1){
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
+            
+            $data = [
+                'process' => "Leaving Group",
+                'back' => "getGroups"
+            ];
+            return view('error')->with($data);
+        }
+        
+        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
+        return $this->onGetAllGroups();
     }
 
     /**
@@ -339,34 +410,35 @@ class GroupController extends Controller
      * Returns post
      *
      * @param Integer $postid
-     * @return PostModel user
+     * @return GroupModel user
      */
-    private function getPostFromId($postid)
+    private function getGroupFromId($groupid)
     {
         Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         // Creates a post with the id
-        $partialPost = new PostModel($postid, "", "", "", "");
+        $partialGroup = new GroupModel($groupid, "", "", 0);
+
         // Creates a post business service
-        $bs = new PostBusinessService();
+        $bs = new GroupBusinessService();
 
         // Calls the bs getPost method
         // flag is either PostModel or rows found
-        $flag = $bs->getPost($partialPost);
+        $flag = $bs->getGroup($partialGroup);
 
         // If flag is an int, returns error page
         if (is_int($flag)) {
             Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
             $data = [
-                'process' => "Get Post",
+                'process' => "Get Group",
                 'back' => "home"
             ];
             return view('error')->with($data);
         }
 
-        $post = $flag;
+        $group = $flag;
 
         // Returns post
-        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $post);
-        return $post;
+        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $group);
+        return $group;
     }
 }

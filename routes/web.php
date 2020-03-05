@@ -189,3 +189,21 @@ Route::post('/processEditUserEducation', 'UserEducationController@onEditUserEduc
 Route::get('/getGroups', 'GroupController@onGetAllGroups');
 
 Route::post('/processCreateGroup', 'GroupController@onCreateGroup');
+
+Route::post('/getGroup', 'GroupController@onGetGroup');
+
+Route::post('/getTryJoinGroup', 'GroupController@onGetTryJoinGroup');
+
+Route::post('/processJoinGroup', 'GroupController@onJoinGroup');
+
+Route::post('/getTryLeaveGroup', 'GroupController@onGetTryLeaveGroup');
+
+Route::post('/processLeaveGroup', 'GroupController@onLeaveGroup');
+
+Route::post('/getTryDeleteGroup', 'GroupController@onGetTryDeleteGroup');
+
+Route::post('/processDeleteGroup', 'GroupController@onDeleteGroup');
+
+Route::post('/getEditGroup', 'GroupController@onGetEditGroup');
+
+Route::post('/processEditGroup', 'GroupController@onEditGroup');

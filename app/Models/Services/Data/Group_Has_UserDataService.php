@@ -31,11 +31,11 @@ class Group_Has_UserDataService implements DataServiceInterface
 
             $stmt = $this->db->prepare('INSERT INTO groups_has_users
                                         (GROUP_ID, USER_ID)
-                                        VALUES (:group_id, :user_id)');
+                                        VALUES (:group_id, :user_id)');           
             $stmt->bindParam(':group_id', $group_id);
             $stmt->bindParam(':user_id', $user_id);
-            $stmt->execute();
-
+            $stmt->execute();      
+            
             Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $stmt->rowCount() . " row(s) affected");
             return $stmt->rowCount();
         } catch (PDOException $e) {
@@ -47,12 +47,39 @@ class Group_Has_UserDataService implements DataServiceInterface
         }
     }
 
-    /**
-     * not implemented
-     */
     function read($group_has_user)
     {
-       
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $group_has_user);
+        try {
+            $group_id = $group_has_user->getGroup_id();
+            $user_id = $group_has_user->getUser_id();
+            $stmt = $this->db->prepare('SELECT * FROM groups_has_users
+                                        WHERE GROUP_ID = :group_id
+                                        AND USER_ID = :user_id');
+            $stmt->bindParam(':group_id', $group_id);
+            $stmt->bindParam(':user_id', $user_id);
+            $stmt->execute();
+            
+            if($stmt->rowCount() != 1){
+                Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $stmt->rowCount() . " row(s) found");               
+                return $stmt->rowCount();
+            }
+            
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            $group_id = $result['GROUP_ID'];
+            $user_id = $result['USER_ID'];
+
+            $group_has_user = new Group_Has_UserModel($group_id, $user_id);
+                                 
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $group_has_user . " and " . $stmt->rowCount() . " row(s) found");
+            return $group_has_user;
+        } catch (PDOException $e) {
+            Logger::error("Exception ", array(
+                "message" => $e->getMessage()
+            ));
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with exception");
+            throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
+        }
     }
     
     function readAllFor($group)

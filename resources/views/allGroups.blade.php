@@ -7,6 +7,8 @@
 	<h2>All Groups</h2>
 </div>
 
+<a href="getNewGroup">Create new</a>
+
 <div>
 	<table id="users" class="display">
 
@@ -23,7 +25,7 @@
 
 		<tbody>
 
-			@foreach ($allGroups_array as $group)
+			@foreach ($allGroups as $group)
 			<tr>
 				<td>{{$group->getTitle()}}</td>
 				<td>{{$group->getDescription()}}</td>
@@ -33,7 +35,7 @@
 						{{ csrf_field() }}
 						 
 						<input type="hidden"
-							name="idToShow" value= "{{$group->getId()}}" />
+							name="idToDisplay" value= "{{$group->getId()}}" />
 						<button type="submit" class="btn btn-dark">View</button>
 					</form>
 				</td>			

@@ -39,7 +39,8 @@ class GroupBusinessService
         $Database = new DatabaseModel();
         $db = $Database->getDb();
         
-        $db->beginTransaction();
+        // should have an atomic transaction, bug with tables
+        //$db->beginTransaction();
 
         // Creates Group and Group_Has_User data services
         $groupDS= new GroupDataService($db);
@@ -51,7 +52,7 @@ class GroupBusinessService
         // If flag is -1, rollback, sets db to null, and returns the flag
         if ($flag == -1) {
             Logger::info(substr(strrchr(__METHOD__, "\\"), 1) . " Rollback");
-            $db->rollBack();
+            //$db->rollBack();
             $db = null;
             Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
             return $flag;
@@ -65,13 +66,13 @@ class GroupBusinessService
         
         if($flag2 != 1){
             Logger::info(substr(strrchr(__METHOD__, "\\"), 1) . " Rollback");
-            $db->rollBack();
+            //$db->rollBack();
             $db = null;
             Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag2);
             return $flag2;
         }
         
-        $db->commit();
+        //$db->commit();
         $db = null;
         Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag2);
         return $flag2;
@@ -133,8 +134,8 @@ class GroupBusinessService
             Logger::info(substr(strrchr(__METHOD__, "\\"), 1) . " Rollback");
             $db->rollBack();
             $db = null;
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . implode($flag2));
-            return $flag2;
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with -1");
+            return -1;
         }
 
         $Group_Has_User_array = $flag2;
@@ -326,7 +327,7 @@ class GroupBusinessService
      *            partialGroup Group to be deleted
      * @return {@link Integer} number of rows affected
      */
-    function remove($partialGroup)
+    function removeGroup($partialGroup)
     {
         Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $partialGroup);
 
@@ -355,9 +356,9 @@ class GroupBusinessService
         return $flag;
     }
     
-    function join($group_has_users)
+    function join($group_has_user)
     {
-        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $group_has_users);
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $group_has_user);
         
         // Creates a new database model and gets the database from it
         $Database = new DatabaseModel();
@@ -366,8 +367,38 @@ class GroupBusinessService
         // Creates credentials data service
         $ds = new Group_Has_UserDataService($db);
         
+        // check if already exists
+        $flag = $ds->read($group_has_user);
+        if(!is_int($flag)){
+            $db = null;
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with -1");
+            return -1;
+        }
+        
         // Calls the credentials data service authenticate method with the credentials
-        $flag = $ds->create($group_has_users);
+        $flag2 = $ds->create($group_has_user);
+        
+        // Sets db to null
+        $db = null;
+        
+        // Returns flag
+        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag2);
+        return $flag2;
+    }
+    
+    function leave($group_has_user)
+    {
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $group_has_user);
+        
+        // Creates a new database model and gets the database from it
+        $Database = new DatabaseModel();
+        $db = $Database->getDb();
+        
+        // Creates credentials data service
+        $ds = new Group_Has_UserDataService($db);      
+        
+        // Calls the credentials data service authenticate method with the credentials
+        $flag = $ds->delete($group_has_user);
         
         // Sets db to null
         $db = null;
