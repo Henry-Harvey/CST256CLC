@@ -1,4 +1,4 @@
-<!-- Displays a form for creating a new job posting -->
+<!-- Displays a form for creating a new group -->
 @extends('layouts.appmasterLoggedIn') 
 @section('title', 'New Group')
 

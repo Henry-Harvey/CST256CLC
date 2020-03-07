@@ -5,9 +5,9 @@
 	@include('layouts._bootstrap')
 </head>
 
-<body>
+<body id="homeBody">
 	@include('layouts._navbar')
-	<div align="center">
+	<div align="center" class="loginForm">
 		@if(!Session::get('sp'))
 		@yield('content')
 		@else

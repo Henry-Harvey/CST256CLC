@@ -1,4 +1,4 @@
-<!-- Displays a form for editting an existing job posting -->
+<!-- Displays a form for editting an existing group -->
 @extends('layouts.appmasterLoggedIn') 
 
 @section('content')

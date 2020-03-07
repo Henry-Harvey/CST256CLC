@@ -47,6 +47,10 @@ class Group_Has_UserDataService implements DataServiceInterface
         }
     }
 
+    /**
+     *
+     * @see DataServiceInterface read
+     */
     function read($group_has_user)
     {
         Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $group_has_user);

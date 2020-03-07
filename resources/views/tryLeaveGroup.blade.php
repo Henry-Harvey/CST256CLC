@@ -1,4 +1,4 @@
-<!-- This view displays a table with a single Job posting that may be deleted by pressing "yes". Pressing "no" brings the user back to the allJobPostings page -->
+<!-- This view displays a warning message for leaving a group -->
 @extends('layouts.appmasterLoggedIn') 
 @section('title', 'Try Leave Group')
 

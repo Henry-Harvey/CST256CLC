@@ -64,7 +64,7 @@ class AccountController extends Controller
             $flag = $bs->register($u);
 
             // If flag is 0, return error page
-            if ($flag == 0) {
+            if ($flag != 1) {
                 Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
                 $data = [
                     'process' => "Register",

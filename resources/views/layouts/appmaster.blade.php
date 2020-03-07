@@ -5,7 +5,7 @@
 	@include('layouts._bootstrap')
 </head>
 
-<body>
+<body id="homeBody">
 	@include('layouts._navbar')
 	<div align="center">
 		@yield('content')

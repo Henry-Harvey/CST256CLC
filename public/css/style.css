@@ -1,6 +1,8 @@
 .top-navbar {
-	background-color: #343a40;
+	background-color: #414a4c;
 	overflow: hidden;
+	box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0
+		rgba(0, 0, 0, 0.12);
 }
 
 .navbar-menu-items {
@@ -9,10 +11,10 @@
 	color: #FFFFFF;
 }
 
-.inner-nav{
-	padding-top:10px;
-	display:inline-block;
-	width:100%;
+.inner-nav {
+	padding-top: 10px;
+	display: inline-block;
+	width: 100%;
 }
 
 .nav-item a {
@@ -30,15 +32,25 @@
 }
 
 .nav-item a.active {
-  color: black;
+	color: black;
 }
 
 .nav-item-left {
-  float: left;
+	float: left;
 }
 
 .nav-item-right {
-  float: right;
+	float: right;
+}
+
+#homeContainer {
+	color: #FFFFFF;
+	margin-top: 200px;
+}
+
+#homeTitle {
+	font-size: 60px;
+	font-weight: 400;
 }
 
 .profile-card {
@@ -51,6 +63,10 @@
 	width: 30%;
 }
 
+.form2 {
+	width: 30%;
+}
+
 .user-resume {
 	text-align: left;
 	margin-left: 20px;
@@ -60,9 +76,14 @@
 
 html, body {
 	height: 100%;
-/* 	color: rgb(218, 215, 210);
+	/* 	color: rgb(218, 215, 210);
 	background-color: rgb(24, 26, 27); */
 	position: relative;
+}
+
+#homeBody {
+	background-image: url("../images/bg2.jpg");
+	background-size: 100%;
 }
 
 .footer {
@@ -72,6 +93,11 @@ html, body {
 	right: 0;
 	bottom: 0;
 	width: 100%;
+	background: #414a4c;
+	color: #FFFFFF;
+	box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0
+		rgba(0, 0, 0, 0.12);
+	padding: 5px;
 }
 
 /* Not used yet */
@@ -85,12 +111,12 @@ html, body {
 }
 
 /* May not need any of these*/
-img{
+img {
 	height: auto;
 	width: 100px;;
 }
 
-.bigImg{
+.bigImg {
 	height: auto;
 	width: 300px;;
 }
@@ -143,20 +169,20 @@ img{
 	border-radius: 4px;
 }
 
-.loginForm{
+.loginForm {
 	display: inline-block;
 }
 
-.loginForm button{
+.loginForm button {
 	display: inline;
-    vertical-align: middle;
+	vertical-align: middle;
 }
 
-.loginFontColor{
+.loginFontColor {
 	color: white;
 }
 
-.displayName{
+.displayName {
 	color: white;
 	font-size: 1.5em;
 }
@@ -170,3 +196,21 @@ img{
 	vertical-align: middle;
 }
 
+#form1 {
+	background-color: #ffffff;
+	box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0
+		rgba(0, 0, 0, 0.12);
+}
+
+#form2 {
+	background-color: #ffffff;
+	box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0
+		rgba(0, 0, 0, 0.12);
+}
+
+.loginForm {
+	width: 50%;
+	margin: 0 auto;
+	display: block;
+	margin-top: 50px;
+}

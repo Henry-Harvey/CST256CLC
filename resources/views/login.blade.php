@@ -1,24 +1,24 @@
-<!-- Displays a form for logging in -->
+<!-- This view displays a form that may be filled out and submitted, resulting in a the user logging in and setting the session or failing login -->
 @extends('layouts.appmasterLoggedOut') 
 @section('title', 'Account Login')
 
 @section('content')
 
-<h2>Login Form</h2>
+<h2 style="color: #FFFFFF">Login Form</h2>
 
 <!-- Form takes in login info and uses http post to persist it to the controller -->
-<form action="processLogin" method="POST">
+<form id="form1" class="border border-light p-5" action="processLogin" method="POST">
 		{{ csrf_field() }}
 
 	<div class="form-group">
 		<label for="username">Username</label> 
-		<input style="width: 30%" type="text" class="form-control" id="username" placeholder="Username" name="username">
+		<input style="width: 50%" type="text" class="form-control" id="username" placeholder="Username" name="username">
 		{{$errors->first('username')}}
 	</div>
 
 	<div class="form-group">
 		<label for="password">Password</label> 
-		<input style="width: 30%" type="password" class="form-control" id="password" placeholder="Password" name="password">
+		<input style="width: 50%" type="password" class="form-control" id="password" placeholder="Password" name="password">
 		{{$errors->first('password')}}
 	</div>
 
@@ -26,6 +26,6 @@
 
 </form>
 	
-	Don't have an account? Click <a href="register">here</a> to register
+	<p style="color: #FFFFFF">Don't have an account? Click <a href="register">here</a> to register</p>
 
 @endsection

@@ -15,16 +15,13 @@ class GroupBusinessService
     /**
      * Takes in a Group model to be created
      * Creates a new database model and gets the database from it
-     * Begins a transaction
      * Creates Group and Group_Has_User data services
      * Calls the Group data service create method with the Group
-     * If flag is -1, rollback, sets db to null, and returns the flag
-     * For each of the Group's Group_Has_Users
-     * Sets the Group_Has_User's Group_id equal to the Group's insert id
+     * If flag is -1, sets db to null and returns the flag
+     * Creates a new Group_has_user with the group's insert id and the group's owner_id
      * Calls the Group_Has_User data service create method with the Group_Has_User
-     * If the flag2 is not equal to 1, rollback, sets db to null, and returns the flag
-     * Ends for each
-     * Commits changes to db and sets db to null
+     * If the flag2 is not equal to 1, sets db to null and returns the flag
+     * Sets db to null
      * Returns 1
      *
      * @param
@@ -49,7 +46,7 @@ class GroupBusinessService
         // flag is insert Id or -1 
         $flag = $groupDS->create($newGroup);
 
-        // If flag is -1, rollback, sets db to null, and returns the flag
+        // If flag is -1, sets db to null and returns the flag
         if ($flag == -1) {
             Logger::info(substr(strrchr(__METHOD__, "\\"), 1) . " Rollback");
             //$db->rollBack();
@@ -60,10 +57,13 @@ class GroupBusinessService
         
         $group_id = $flag;
         
+        // Creates a new Group_has_user with the group's insert id and the group's owner_id
         $group_has_users = new Group_Has_UserModel($group_id, $newGroup->getOwner_id());
         
+        // Calls the Group_Has_User data service create method with the Group_Has_User
         $flag2 = $this->join($group_has_users);
         
+        // If the flag2 is not equal to 1, sets db to null and returns the flag
         if($flag2 != 1){
             Logger::info(substr(strrchr(__METHOD__, "\\"), 1) . " Rollback");
             //$db->rollBack();
@@ -73,13 +73,17 @@ class GroupBusinessService
         }
         
         //$db->commit();
+        
+        // Sets db to null
         $db = null;
+        
+        // Returns 1
         Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag2);
         return $flag2;
     }
 
     /**
-     * Takes in a Group model to be found
+     * Takes in a partial Group model to be found
      * Creates a new database model and gets the database from it
      * Begins a transaction
      * Creates Group and Group_Has_User data services
@@ -310,18 +314,12 @@ class GroupBusinessService
     }
 
     /**
-     * Takes in a Group model to be deleted
+     * Takes in a partial Group model to be deleted
      * Creates a new database model and gets the database from it
-     * Begins a transaction
-     * Creates Group and Group_Has_User data services
-     * For each of the Group's Group_Has_Users
-     * Calls the Group_Has_User data service delete method with the Group_Has_User
-     * If flag is not 1, rollback, sets db to null, and returns the flag
-     * End for each
+     * Creates Group data service
      * Calls the Group data service delete method with the Group
-     * If flag2 is not 1, rollback, sets db to null, and returns the flag
-     * Commits changes to db and sets db to null
-     * Returns flag2
+     * If flag is not 1, sets db to null and returns the flag
+     * Returns flag
      *
      * @param
      *            partialGroup Group to be deleted
@@ -335,14 +333,14 @@ class GroupBusinessService
         $Database = new DatabaseModel();
         $db = $Database->getDb();
 
-        // Creates Group and Group_Has_User data services
+        // Creates Group data service
         $ds = new GroupDataService($db);
 
         // Calls the Group data service delete method with the Group
-        // flag2 is rows affected
+        // flag is rows affected
         $flag = $ds->delete($partialGroup);
 
-        // If flag2 is not 1, rollback, sets db to null, and returns the flag
+        // If flag is not 1, sets db to null and returns the flag
         if ($flag != 1) {
             $db = null;
             Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
@@ -351,11 +349,25 @@ class GroupBusinessService
 
         $db = null;
 
-        // Returns flag2
+        // Returns flag
         Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
         return $flag;
     }
     
+    /**
+     * Takes in a group_has_user model
+     * Creates a new database model and gets the database from it
+     * Creates Group_has_user data service
+     * Calls the Group_has_user data service read method with the Group_has_user
+     * If flag is not not an int, sets db to null and returns the flag
+     * Calls the Group_has_user data service create method with the Group_has_user
+     * Sets db to null
+     * Returns flag2
+     *
+     * @param
+     *            group_has_user Group_has_user to be created
+     * @return {@link Integer} number of rows affected
+     */
     function join($group_has_user)
     {
         Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $group_has_user);
@@ -364,28 +376,42 @@ class GroupBusinessService
         $Database = new DatabaseModel();
         $db = $Database->getDb();
         
-        // Creates credentials data service
+        // Creates Group_has_user data service
         $ds = new Group_Has_UserDataService($db);
         
-        // check if already exists
+        // Calls the Group_has_user data service read method with the Group_has_user
         $flag = $ds->read($group_has_user);
+        
+        // If flag is not not an int, sets db to null and returns the flag
         if(!is_int($flag)){
             $db = null;
             Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with -1");
             return -1;
         }
         
-        // Calls the credentials data service authenticate method with the credentials
+        // Calls the Group_has_user data service create method with the Group_has_user
         $flag2 = $ds->create($group_has_user);
         
         // Sets db to null
         $db = null;
         
-        // Returns flag
+        // Returns flag2
         Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag2);
         return $flag2;
     }
     
+    /**
+     * Takes in a group_has_user model
+     * Creates a new database model and gets the database from it
+     * Creates Group_has_user data service
+     * Calls the Group_has_user data service delete method with the Group_has_user
+     * Sets db to null
+     * Returns flag
+     *
+     * @param
+     *            group_has_user Group_has_user to be deleted
+     * @return {@link Integer} number of rows affected
+     */
     function leave($group_has_user)
     {
         Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $group_has_user);
@@ -394,10 +420,10 @@ class GroupBusinessService
         $Database = new DatabaseModel();
         $db = $Database->getDb();
         
-        // Creates credentials data service
+        // Creates Group_has_user data service
         $ds = new Group_Has_UserDataService($db);      
         
-        // Calls the credentials data service authenticate method with the credentials
+        // Calls the Group_has_user data service delete method with the Group_has_user
         $flag = $ds->delete($group_has_user);
         
         // Sets db to null

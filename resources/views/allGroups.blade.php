@@ -1,4 +1,4 @@
-<!-- Displays a table with all users. The admin can click "suspend" or "delete" to perform those actions -->
+<!-- Displays a table with all groups -->
 @extends('layouts.appmasterLoggedIn') 
 @section('title', 'Groups')
 

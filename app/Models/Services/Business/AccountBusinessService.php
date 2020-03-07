@@ -15,6 +15,8 @@ class AccountBusinessService
      * Creates a new database model and gets the database from it
      * Begins a transaction
      * Creates credentials and user data services
+     * Calls the credentials data service readByUsername method with the user's credentials
+     * If flag is not an int, rollback, sets db to null, and returns the flag
      * Calls the credentials data service create method with the user's credentials
      * If flag is -1, rollback, sets db to null, and returns the flag
      * Sets the user's credentials_id to the flag
@@ -42,27 +44,25 @@ class AccountBusinessService
         $credentialsDS = new CredentialsDataService($db);
         $userDS = new UserDataService($db);
 
-        // Calls the credentials data service create method with the user's credentials
-        $flag = $credentialsDS->create($newUser->getCredentials());
-
-        // If flag is -1, rollback, sets db to null, and returns the flag
-        if ($flag == - 1) {
+        // Calls the credentials data service read method with the user's credentials
+        // flag is rows found
+        $flag = $credentialsDS->readByUsername($newUser->getCredentials());
+        
+        // If flag is not an int, rollback, sets db to null, and returns the flag
+        if(!is_int($flag)){
             Logger::info(substr(strrchr(__METHOD__, "\\"), 1) . " Rollback");
             $db->rollBack();
             $db = null;
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
-            return $flag;
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with -1");
+            return -2;
         }
+        
+        // Calls the credentials data service create method with the user's credentials
+        // flag is rows affected
+        $flag2 = $credentialsDS->create($newUser->getCredentials());
 
-        // Sets the user's credentials_id to the flag
-        $insertId = $flag;
-        $newUser->setCredentials_id($insertId);
-
-        // Calls the user data service create method with the user
-        $flag2 = $userDS->create($newUser);
-
-        // If the flag2 is not equal to 1, rollback, sets db to null, and returns the flag
-        if ($flag2 != 1) {
+        // If flag is -1, rollback, sets db to null, and returns the flag
+        if ($flag2 == - 1) {
             Logger::info(substr(strrchr(__METHOD__, "\\"), 1) . " Rollback");
             $db->rollBack();
             $db = null;
@@ -70,13 +70,29 @@ class AccountBusinessService
             return $flag2;
         }
 
+        // Sets the user's credentials_id to the flag
+        $insertId = $flag2;
+        $newUser->setCredentials_id($insertId);
+
+        // Calls the user data service create method with the user
+        $flag3 = $userDS->create($newUser);
+
+        // If the flag2 is not equal to 1, rollback, sets db to null, and returns the flag
+        if ($flag3 != 1) {
+            Logger::info(substr(strrchr(__METHOD__, "\\"), 1) . " Rollback");
+            $db->rollBack();
+            $db = null;
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag3);
+            return $flag3;
+        }
+
         // Commits changes to db and sets db to null
         $db->commit();
         $db = null;
 
         // Returns flag2
-        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag2);
-        return $flag2;
+        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag3);
+        return $flag3;
     }
 
     /**
