@@ -42,19 +42,15 @@
 				<td>{{$user->getCredentials()->getPassword()}}</td>
 				<td>
 					<form action="getOtherProfile" method="POST">
-						{{ csrf_field() }}
-						 
-						<input type="hidden"
-							name="idToShow" value= "{{$user->getId()}}" />
+						{{ csrf_field() }}					 
+						<input type="hidden" name="idToShow" value= "{{$user->getId()}}" />
 						<button type="submit" class="btn btn-dark">View</button>
-
 					</form>
 				</td>
 				<td>
 				@if (Session::get('sp')->getUser_id() != $user->getId())
 					<form action="getTryToggleSuspension" method="POST">
-						{{ csrf_field() }}
-							
+						{{ csrf_field() }}					
 							<input type="hidden" name="idToToggle" value= "{{$user->getId()}}" />
 				@if ($user->getCredentials()->getSuspended() == 0)
 						<button type="submit" class="btn btn-dark">Suspend</button>

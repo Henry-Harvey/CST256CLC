@@ -60,6 +60,10 @@ Route::get('/getNewGroup', function () {
     return view('newGroup');
 });
 
+Route::get('/getSearchJobPostings', function () {
+    return view('searchJobPostings');
+});
+
 /*
  * Account Controller Routes
  */
@@ -111,6 +115,8 @@ Route::post('/processToggleSuspension', 'AdminController@onToggleSuspension');
 // Calls the post controller create post method from the newPost view form
 Route::post('/processCreatePost', 'PostController@onCreatePost');
 
+Route::post('/getJobPost', 'PostController@onGetPost');
+
 // Calls the post controller get all posts method from the navbar
 Route::get('/getJobPostings', 'PostController@onGetAllPosts');
 
@@ -125,6 +131,10 @@ Route::post('/getTryDeletePost', 'PostController@onTryDeletePost');
 
 // Calls the post controller delete post method from the tryDeletePost view form
 Route::post('/processDeletePost', 'PostController@onDeletePost');
+
+Route::post('/processSearchPosts', 'PostController@onSearchPosts');
+
+Route::post('/processApply', 'PostController@onApply');
 
 /*
  * UserJob Controller Routes

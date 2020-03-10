@@ -9,6 +9,7 @@
 			@if(Session::get('sp'))
 			<li class="nav-item"><a class="nav-item" href="getProfile">User Profile</a></li>
 			<li class="nav-item"><a class="nav-item" href="getJobPostings">Job Postings</a></li>
+			<li class="nav-item"><a class="nav-item" href="getSearchJobPostings">Seach Jobs</a></li>
 			<li class="nav-item"><a class="nav-item" href="getGroups">Groups</a></li>
 			
 				@if(Session::get('sp')->getRole() != 0)

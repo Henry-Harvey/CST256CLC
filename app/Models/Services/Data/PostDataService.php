@@ -42,7 +42,7 @@ class PostDataService implements DataServiceInterface
 
             if ($stmt->rowCount() != 1) {
                 Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with -1. " . $stmt->rowCount() . " row(s) affected");
-                return -1;
+                return - 1;
             }
 
             $insertId = $this->db->lastInsertId();
@@ -185,6 +185,63 @@ class PostDataService implements DataServiceInterface
 
             Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $stmt->rowCount() . " row(s) affected");
             return $stmt->rowCount();
+        } catch (PDOException $e) {
+            Logger::error("Exception ", array(
+                "message" => $e->getMessage()
+            ));
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with exception");
+            throw new DatabaseException("Database Exception: " . $e->getMessage(), 0, $e);
+        }
+    }
+
+    function readAllSearch($post)
+    {
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        try {
+            $title = $post->getTitle();
+            $description = $post->getDescription();
+
+            if ($title == null && $description == null) {
+                Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with empty array");
+                return array();
+            } else if ($title != null && $description == null) {
+                $title = '%' . $title . '%';
+                $stmt = $this->db->prepare('SELECT * FROM posts
+                                        WHERE TITLE LIKE :title');
+                $stmt->bindParam(':title', $title);
+                $stmt->execute();
+            } else if ($title == null && $description != null) {
+                $description = '%' . $description . '%';
+                $stmt = $this->db->prepare('SELECT * FROM posts
+                                        WHERE DESCRIPTION LIKE :description');
+                $stmt->bindParam(':description', $description);
+                $stmt->execute();
+            } else {
+                $title = '%' . $title . '%';
+                $description = '%' . $description . '%';
+
+                $stmt = $this->db->prepare('SELECT * FROM posts
+                                        WHERE TITLE LIKE :title
+                                        OR DESCRIPTION LIKE :description');
+                $stmt->bindParam(':title', $title);
+                $stmt->bindParam(':description', $description);
+                $stmt->execute();
+            }
+
+            $post_array = array();
+            while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $id = $result['ID'];
+                $title = $result['TITLE'];
+                $company = $result['COMPANY'];
+                $location = $result['LOCATION'];
+                $description = $result['DESCRIPTION'];
+
+                $post = new PostModel($id, $title, $company, $location, $description);
+
+                array_push($post_array, $post);
+            }
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with PostModel array and " . $stmt->rowCount() . " row(s) found");
+            return $post_array;
         } catch (PDOException $e) {
             Logger::error("Exception ", array(
                 "message" => $e->getMessage()

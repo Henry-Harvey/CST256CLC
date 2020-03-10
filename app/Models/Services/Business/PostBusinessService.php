@@ -382,6 +382,65 @@ class PostBusinessService
         Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag2);
         return $flag2;
     }
+    
+    function searchPosts($partialPost)
+    {
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $partialPost);
+        
+        // Creates a new database model and gets the database from it
+        $Database = new DatabaseModel();
+        $db = $Database->getDb();
+        
+        // Begins a transaction
+        $db->beginTransaction();
+        
+        // Creates post and postSkill data services
+        $postDS = new PostDataService($db);
+        $postSkillDS = new PostSkillDataService($db);
+        
+        // Calls the post data service readAll method
+        // flag is array Post models
+        $flag = $postDS->readAllSearch($partialPost);
+        
+        // If flag is empty, rollback, sets db to null, and returns the flag
+        if (empty($flag)) {
+            Logger::info(substr(strrchr(__METHOD__, "\\"), 1) . " Rollback");
+            $db->rollBack();
+            $db = null;
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . implode($flag));
+            return $flag;
+        }
+        
+        // For each of the posts found
+        $posts_array = $flag;
+        foreach ($posts_array as $post) {
+            // Calls the postSkill data service readAllFor method with the post
+            // flag2 is array of PostSkill models
+            $flag2 = $postSkillDS->readAllFor($post);
+            
+            // If flag2 is empty, rollback, sets db to null, and returns the flag
+            if (empty($flag2)) {
+                Logger::info(substr(strrchr(__METHOD__, "\\"), 1) . " Rollback");
+                $db->rollBack();
+                $db = null;
+                Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . implode($flag2));
+                return $flag2;
+            }
+            
+            // Set the post's postSkills to the postSkills found
+            $postSkill_array = $flag2;
+            $post->setPostSkill_array($postSkill_array);
+        }
+        // After for each
+        
+        // Commits changes to db and sets db to null
+        $db->commit();
+        $db = null;
+        
+        // Returns array of found posts
+        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with PostModel array");
+        return $posts_array;
+    }
 }
 
 

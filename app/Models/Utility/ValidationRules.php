@@ -8,12 +8,12 @@ class ValidationRules
     public function getRegistrationRules()
     {
         $rules = [
-            'username' => 'Required | Between:1,15',
-            'password' => 'Required | Between:1,15',
-            'firstname' => 'Required | Between:1,15',
-            'lastname' => 'Required | Between:1,15',
-            'location' => 'Required | Between:1,15',
-            'summary' => 'Required | Between:1,15'
+            'username' => 'Required | Between:1,50',
+            'password' => 'Required | Between:1,50',
+            'firstname' => 'Required | Between:1,50',
+            'lastname' => 'Required | Between:1,50',
+            'location' => 'Required | Between:1,50',
+            'summary' => 'Required | Between:1,50'
         ];
         return $rules;
     }
@@ -21,8 +21,8 @@ class ValidationRules
     public function getLoginRules()
     {
         $rules = [
-            'username' => 'Required | Between:1,15',
-            'password' => 'Required | Between:1,15'
+            'username' => 'Required | Between:1,50',
+            'password' => 'Required | Between:1,50'
         ];
         return $rules;
     }
@@ -31,10 +31,10 @@ class ValidationRules
     {
         $rules = [
             'id' => 'Required',
-            'firstname' => 'Required | Between:1,15',
-            'lastname' => 'Required | Between:1,15',
-            'location' => 'Required | Between:1,15',
-            'summary' => 'Required | Between:1,15',
+            'firstname' => 'Required | Between:1,50',
+            'lastname' => 'Required | Between:1,50',
+            'location' => 'Required | Between:1,50',
+            'summary' => 'Required | Between:1,50',
             'role' => 'Required',
             'credentials_id' => 'Required'
         ];
@@ -44,11 +44,11 @@ class ValidationRules
     public function getPostRules()
     {
         $rules = [
-            'title' => 'Required | Between:1,15',
-            'company' => 'Required | Between:1,15',
-            'location' => 'Required | Between:1,15',
+            'title' => 'Required | Between:1,50',
+            'company' => 'Required | Between:1,50',
+            'location' => 'Required | Between:1,50',
             'description' => 'Required | Between:1,75',
-            'skill1' => 'Required | Between:1,15',
+            'skill1' => 'Required | Between:1,50',
         ];
         return $rules;
     }

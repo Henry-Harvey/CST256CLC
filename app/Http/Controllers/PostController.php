@@ -111,6 +111,30 @@ class PostController extends Controller
         }
     }
 
+    public function onGetPost(Request $request)
+    {
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        try {
+            $post = $this->getPostFromId($request->input('idToShow'));
+
+            // Passes flag to allJobPostings view
+            $data = [
+                'post' => $post
+            ];
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to jobPost view");
+            return view('jobPost')->with($data);
+        } catch (Exception $e) {
+            Logger::error("Exception ", array(
+                "message" => $e->getMessage()
+            ));
+            $data = [
+                'errorMsg' => $e->getMessage()
+            ];
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
+            return view('exception')->with($data);
+        }
+    }
+    
     /**
      * Create a post business service
      * Calls getAllPosts bs method
@@ -129,25 +153,24 @@ class PostController extends Controller
             // Calls getAllPosts bs method
             // flag is array
             $flag = $bs->getAllPosts();
-
+            
             // If flag is empty, returns error page
             if (empty($flag)) {
                 Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . implode($flag));
-                if(Session::get('sp')->getRole() != 0){
+                if (Session::get('sp')->getRole() != 0) {
                     $data = [
                         'process' => "Loading Job Posts",
                         'back' => "newPost"
                     ];
-                }
-                else{
+                } else {
                     $data = [
                         'process' => "Loading Job Posts",
                         'back' => "home"
                     ];
-                }            
+                }
                 return view('error')->with($data);
             }
-
+            
             // Passes flag to allJobPostings view
             $data = [
                 'allPosts' => $flag
@@ -213,7 +236,7 @@ class PostController extends Controller
      * Calls the editPost bs method with the post
      * If flag is is not 1, returns error page
      * Returns this controller's getAllPosts method
-     * 
+     *
      * @param Request $request
      *            Implicit request
      * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory result view
@@ -224,7 +247,7 @@ class PostController extends Controller
         try {
             // Creates a ValidationRules and validates the request with the post edit rules
             $vr = new ValidationRules();
-            //$this->validate($request, $vr->getPostEditRules());
+            // $this->validate($request, $vr->getPostEditRules());
 
             // Sets variables equal to request inputs
             $id = $request->input('id');
@@ -270,7 +293,7 @@ class PostController extends Controller
             // Calls the editPost bs method with the post
             // flag is rows affected
             $flag = $bs->editPost($post);
-            
+
             // If flag is is not 1, returns error page
             if ($flag != 1) {
                 Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
@@ -348,7 +371,7 @@ class PostController extends Controller
         // Calls the remove bs method
         // flag is rows affected
         $flag = $bs->remove($post);
-        
+
         // If flag is not equal to 1, returns error page
         if ($flag != 1) {
             Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
@@ -358,10 +381,78 @@ class PostController extends Controller
             ];
             return view('error')->with($data);
         }
-        
+
         // Returns this method's onGetAllUsers method
         Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
         return $this->onGetAllPosts();
+    }
+
+    public function onSearchPosts(Request $request)
+    {
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        try {
+            $title = $request->input('title');
+            $description = $request->input('description');
+
+            $partialPost = new PostModel("", $title, "", "", $description);
+
+            // Create a post business service
+            $bs = new PostBusinessService();
+
+            // Calls getAllPosts bs method
+            // flag is array
+            $flag = $bs->searchPosts($partialPost);
+
+            // If flag is empty, returns error page
+            if (empty($flag)) {
+                Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . implode($flag));
+                $data = [
+                    'process' => "Searching Job Posts",
+                    'back' => "getSearchJobPostings"
+                ];
+                return view('error')->with($data);
+            }
+
+            // Passes flag to allJobPostings view
+            $data = [
+                'foundPosts' => $flag
+            ];
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to searchJobPostingsResults view");
+            return view('searchJobPostingsResults')->with($data);
+        } catch (Exception $e) {
+            Logger::error("Exception ", array(
+                "message" => $e->getMessage()
+            ));
+            $data = [
+                'errorMsg' => $e->getMessage()
+            ];
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
+            return view('exception')->with($data);
+        }
+    }
+    
+    public function onApply(Request $request)
+    {
+        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        try {
+            $post = $this->getPostFromId($request->input('id'));
+      
+           // Passes flag to allJobPostings view
+            $data = [
+                'post' => $post
+            ];
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to applied view");
+            return view('applied')->with($data);
+        } catch (Exception $e) {
+            Logger::error("Exception ", array(
+                "message" => $e->getMessage()
+            ));
+            $data = [
+                'errorMsg' => $e->getMessage()
+            ];
+            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
+            return view('exception')->with($data);
+        }
     }
 
     /**
@@ -380,13 +471,13 @@ class PostController extends Controller
         Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         // Creates a post with the id
         $partialPost = new PostModel($postid, "", "", "", "");
-        //  Creates a post business service
+        // Creates a post business service
         $bs = new PostBusinessService();
-        
+
         // Calls the bs getPost method
         // flag is either PostModel or rows found
         $flag = $bs->getPost($partialPost);
-        
+
         // If flag is an int, returns error page
         if (is_int($flag)) {
             Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
@@ -396,7 +487,7 @@ class PostController extends Controller
             ];
             return view('error')->with($data);
         }
-        
+
         $post = $flag;
 
         // Returns post
