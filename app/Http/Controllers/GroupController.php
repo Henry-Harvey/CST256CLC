@@ -93,7 +93,7 @@ class GroupController extends Controller
         Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         try {           
             // Calls this controller's getGroupFromId method with the request input
-            $group = $this->getGroupFromId(input('idToDisplay'));
+            $group = $this->getGroupFromId($request->input('idToDisplay'));
             
             // Foreach loop to determne if the user is a member of the group
             // Sets a boolean to true if they are, false if not
