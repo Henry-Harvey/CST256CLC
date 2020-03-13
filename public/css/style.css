@@ -126,6 +126,7 @@ img {
 	font-family: "Trebuchet MS", Arial, Helvettica, sans-serif;
 	border-collapse: collapse;
 	width: 100%;
+	background-color: #ffffff;
 }
 
 .table td, .table th {
