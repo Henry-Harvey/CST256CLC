@@ -1,5 +1,5 @@
 <!-- This view displays a form that may be filled out and submitted, resulting in a the user logging in and setting the session or failing login -->
-@extends('layouts.appmasterLoggedOut') 
+@extends('layouts.appmaster') 
 @section('title', 'Account Login')
 
 @section('content')
