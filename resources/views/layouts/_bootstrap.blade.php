@@ -8,7 +8,7 @@
 <!-- Material Design Bootstrap -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.12.0/css/mdb.min.css" rel="stylesheet">
 
-<link href="{{asset('public/css/style.css')}}" rel="stylesheet" type="text/css"/>
+<link href="/public/css/style.css" rel="stylesheet" type="text/css"/>
 
 
 
