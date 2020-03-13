@@ -1,5 +1,5 @@
 <!-- This view displays a table with a single user that may be deleted by pressing "yes". Pressing "no" brings the user back to the allUsers page -->
-@extends('layouts.appmasterAdmin') @section('title', 'Try Delete')
+@extends('layouts.appmaster') @section('title', 'Try Delete')
 
 @section('content')
 <div class="container">

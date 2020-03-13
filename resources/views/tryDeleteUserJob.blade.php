@@ -1,5 +1,5 @@
 <!-- This view displays a table with a single UserJob that may be deleted by pressing "yes". Pressing "no" brings the user back to the profile page -->
-@extends('layouts.appmasterLoggedIn') @section('title', 'Try Delete Job')
+@extends('layouts.appmaster') @section('title', 'Try Delete Job')
 
 @section('content')
 <div class="container">

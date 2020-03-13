@@ -1,5 +1,5 @@
 <!-- Displays a form for editting an existing job posting -->
-@extends('layouts.appmasterAdmin') 
+@extends('layouts.appmaster') 
 
 @section('content')
 <form action="processEditPost" method="POST">

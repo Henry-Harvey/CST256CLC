@@ -1,5 +1,5 @@
 <!-- This view displays a warning message for leaving a group -->
-@extends('layouts.appmasterLoggedIn') 
+@extends('layouts.appmaster') 
 @section('title', 'Try Leave Group')
 
 @section('content')

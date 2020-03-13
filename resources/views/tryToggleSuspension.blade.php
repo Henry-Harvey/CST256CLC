@@ -1,5 +1,5 @@
 <!-- This view displays a table with a single user whose suspension may be toggled by pressing "yes". Pressing "no" brings the user back to the allUsers page -->
-@extends('layouts.appmasterAdmin') @section('title', 'Try Toggle Suspension')
+@extends('layouts.appmaster') @section('title', 'Try Toggle Suspension')
 
 @section('content')
 <div class="container">

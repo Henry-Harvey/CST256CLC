@@ -1,5 +1,5 @@
 <!-- Displays a user's profile -->
-@extends('layouts.appmasterLoggedIn') @section('content')
+@extends('layouts.appmaster') @section('content')
 
 <div class="profile-card">
 

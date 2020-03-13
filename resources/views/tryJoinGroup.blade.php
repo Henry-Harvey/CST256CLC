@@ -1,5 +1,5 @@
 <!-- This view displays a warning message for joining a group -->
-@extends('layouts.appmasterLoggedIn') 
+@extends('layouts.appmaster') 
 @section('title', 'Try Join Group')
 
 @section('content')

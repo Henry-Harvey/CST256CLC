@@ -1,5 +1,5 @@
 <!-- This view displays a warning message for deleting a group -->
-@extends('layouts.appmasterLoggedIn') 
+@extends('layouts.appmaster') 
 @section('title', 'Try Delete Group')
 
 @section('content')

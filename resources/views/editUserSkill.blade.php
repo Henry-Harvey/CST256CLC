@@ -1,5 +1,5 @@
 <!-- Displays a form for editting a user's skill -->
-@extends('layouts.appmasterLoggedIn') 
+@extends('layouts.appmaster') 
 
 @section('content')
 <form action="processEditUserSkill" method="POST">

@@ -1,5 +1,5 @@
 <!-- Displays a table with all users. The admin can click "suspend" or "delete" to perform those actions -->
-@extends('layouts.appmasterAdmin') 
+@extends('layouts.appmaster') 
 @section('title', 'Admin')
 
 @section('content') 

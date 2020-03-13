@@ -1,5 +1,5 @@
 <!-- Displays a form for registering a new account -->
-@extends('layouts.appmasterLoggedOut') 
+@extends('layouts.appmaster') 
 @section('title', 'Account Registration')
 
 @section('content')

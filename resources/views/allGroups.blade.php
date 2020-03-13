@@ -1,5 +1,5 @@
 <!-- Displays a table with all groups -->
-@extends('layouts.appmasterLoggedIn') 
+@extends('layouts.appmaster') 
 @section('title', 'Groups')
 
 @section('content') 

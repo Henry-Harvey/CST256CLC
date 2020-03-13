@@ -1,5 +1,5 @@
 <!-- Displays a form for editting an existing group -->
-@extends('layouts.appmasterLoggedIn') 
+@extends('layouts.appmaster') 
 
 @section('content')
 <form action="processEditGroup" method="POST">

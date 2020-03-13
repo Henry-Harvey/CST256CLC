@@ -1,5 +1,5 @@
 <!-- This view displays a table with a single Job posting that may be deleted by pressing "yes". Pressing "no" brings the user back to the allJobPostings page -->
-@extends('layouts.appmasterAdmin') @section('title', 'Try Delete Post')
+@extends('layouts.appmaster') @section('title', 'Try Delete Post')
 
 @section('content')
 <div class="container">

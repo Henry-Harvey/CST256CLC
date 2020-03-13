@@ -1,5 +1,5 @@
 <!-- Displays a form for creating a new job posting -->
-@extends('layouts.appmasterAdmin') 
+@extends('layouts.appmaster') 
 @section('title', 'New Job Posting')
 
 @section('content')

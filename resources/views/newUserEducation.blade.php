@@ -1,5 +1,5 @@
 <!-- Displays a form for a creating new user education -->
-@extends('layouts.appmasterLoggedIn')
+@extends('layouts.appmaster')
 
 @section('content')
 

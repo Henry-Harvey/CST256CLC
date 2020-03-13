@@ -1,5 +1,5 @@
 <!-- Displays a form for editting a user's profile -->
-@extends('layouts.appmasterLoggedIn') 
+@extends('layouts.appmaster') 
 
 @section('content')
 <form action="processEditProfile" method="POST">

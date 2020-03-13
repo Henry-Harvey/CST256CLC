@@ -1,5 +1,5 @@
 <!-- This view displays a table with a single UserSkill that may be deleted by pressing "yes". Pressing "no" brings the user back to the profile page -->
-@extends('layouts.appmasterLoggedIn') @section('title', 'Try Delete Skill')
+@extends('layouts.appmaster') @section('title', 'Try Delete Skill')
 
 @section('content')
 <div class="container">

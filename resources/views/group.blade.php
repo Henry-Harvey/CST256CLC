@@ -1,5 +1,5 @@
 <!-- Displays a group -->
-@extends('layouts.appmasterLoggedIn') 
+@extends('layouts.appmaster') 
 @section('content')
 
 <div class="profile-card">

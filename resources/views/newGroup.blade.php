@@ -1,5 +1,5 @@
 <!-- Displays a form for creating a new group -->
-@extends('layouts.appmasterLoggedIn') 
+@extends('layouts.appmaster') 
 @section('title', 'New Group')
 
 @section('content')
