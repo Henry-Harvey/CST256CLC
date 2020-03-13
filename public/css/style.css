@@ -84,6 +84,7 @@ html, body {
 #homeBody {
 	background-image: url("../images/bg2.jpg");
 	background-size: 100%;
+	background-repeat: no-repeat;
 }
 
 .footer {
