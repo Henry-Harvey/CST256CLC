@@ -60,6 +60,7 @@ Route::get('/getNewGroup', function () {
     return view('newGroup');
 });
 
+// Navigates to the search post form from the navbar
 Route::get('/getSearchJobPostings', function () {
     return view('searchJobPostings');
 });
@@ -132,8 +133,10 @@ Route::post('/getTryDeletePost', 'PostController@onTryDeletePost');
 // Calls the post controller delete post method from the tryDeletePost view form
 Route::post('/processDeletePost', 'PostController@onDeletePost');
 
+// Calls the post controller search posts method from the searchJobPostings view form
 Route::post('/processSearchPosts', 'PostController@onSearchPosts');
 
+// Calls the post controller apply method from the jobPost view
 Route::post('/processApply', 'PostController@onApply');
 
 /*

@@ -1,4 +1,4 @@
-<!-- Displays a table with all job postings. The admin can add new job postings -->
+<!-- Displays a form for the user to fill out to search for a job post -->
 @extends('layouts.appmaster') 
 @section('title', 'Search Job Postings')
 

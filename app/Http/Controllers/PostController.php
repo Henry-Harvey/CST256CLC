@@ -387,20 +387,35 @@ class PostController extends Controller
         return $this->onGetAllPosts();
     }
 
+    /**
+     * Takes in a request from searchJobPostings view
+     * Sets variables equal to the request inputs
+     * Creates a partial post from the variables
+     * Creates a post business service
+     * Calls the searchPosts bs method with the partial post
+     * If flag is empty, returns error page
+     * Passes the found posts to the results page
+     *
+     * @param Request $request
+     *            Implicit request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory result view
+     */
     public function onSearchPosts(Request $request)
     {
         Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         try {
+            // Sets variables equal to the request inputs
             $title = $request->input('title');
             $description = $request->input('description');
 
+            // Creates a partial post from the variables
             $partialPost = new PostModel("", $title, "", "", $description);
 
             // Create a post business service
             $bs = new PostBusinessService();
 
-            // Calls getAllPosts bs method
-            // flag is array
+            // Calls the searchPosts bs method with the partial post
+            // flag is array of PostModels
             $flag = $bs->searchPosts($partialPost);
 
             // If flag is empty, returns error page
@@ -413,7 +428,7 @@ class PostController extends Controller
                 return view('error')->with($data);
             }
 
-            // Passes flag to allJobPostings view
+            // Passes the found posts to the results page
             $data = [
                 'foundPosts' => $flag
             ];
@@ -431,13 +446,23 @@ class PostController extends Controller
         }
     }
     
+    /**
+     * Takes in a request from jobPost view
+     * Sets a post equal to this method's getPostFromId method with the request input
+     * Passes the post to the applied view
+     * 
+     * @param Request $request
+     *            Implicit request
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory result view
+     */
     public function onApply(Request $request)
     {
         Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         try {
+            // Sets a post equal to this method's getPostFromId method with the request input
             $post = $this->getPostFromId($request->input('id'));
       
-           // Passes flag to allJobPostings view
+           // Passes flag to the applied view
             $data = [
                 'post' => $post
             ];

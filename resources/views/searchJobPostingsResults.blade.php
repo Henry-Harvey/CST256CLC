@@ -1,4 +1,4 @@
-<!-- Displays a table with all job postings. The admin can add new job postings -->
+<!-- Displays a table with all found job postings -->
 @extends('layouts.appmaster') 
 @section('title', 'Job Postings Results')
 

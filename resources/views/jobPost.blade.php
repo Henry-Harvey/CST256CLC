@@ -1,4 +1,4 @@
-<!-- Displays a user's profile -->
+<!-- Displays a job posting -->
 @extends('layouts.appmaster') @section('content')
 
 <div class="profile-card">

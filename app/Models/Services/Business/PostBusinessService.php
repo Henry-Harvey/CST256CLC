@@ -383,6 +383,22 @@ class PostBusinessService
         return $flag2;
     }
     
+    /**
+     * Creates a new database model and gets the database from it
+     * Begins a transaction
+     * Creates post and postSkill data services
+     * Calls the post data service readAllSearch method
+     * If flag is empty, rollback, sets db to null, and returns the flag
+     * For each of the posts found
+     * Calls the postSkill data service readAllFor method with the post
+     * If flag2 is empty, rollback, sets db to null, and returns the flag
+     * Set the post's postSkills to the postSkills found
+     * After for each
+     * Commits changes to db and sets db to null
+     * Returns array of found posts
+     *
+     * @return {@link Array} array of posts found
+     */
     function searchPosts($partialPost)
     {
         Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $partialPost);
@@ -398,7 +414,7 @@ class PostBusinessService
         $postDS = new PostDataService($db);
         $postSkillDS = new PostSkillDataService($db);
         
-        // Calls the post data service readAll method
+        // Calls the post data service readAllSearch method
         // flag is array Post models
         $flag = $postDS->readAllSearch($partialPost);
         
