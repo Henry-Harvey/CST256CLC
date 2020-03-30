@@ -2,7 +2,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Utility\Logger;
+use App\Models\Utility\LoggerInterface;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\ValidationException;
 use Exception;
@@ -13,6 +13,12 @@ use App\Models\Objects\Group_Has_UserModel;
 
 class GroupController extends Controller
 {
+    protected $logger;
+    
+    public function __construct(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
 
     /**
      * Takes in a request from newGroup form
@@ -30,7 +36,7 @@ class GroupController extends Controller
      */
     public function onCreateGroup(Request $request)
     {
-        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        $this->logger->info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         try {
             // Creates a ValidationRules and validates the request with the group rules
             $vr = new ValidationRules();
@@ -52,7 +58,7 @@ class GroupController extends Controller
 
             // If flag doesnt equal 1, returns error page
             if ($flag != 1) {
-                Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
+                $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
                 $data = [
                     'process' => "Create Group",
                     'back' => "newGroup"
@@ -61,18 +67,18 @@ class GroupController extends Controller
             }
 
             // Returns this controller's getAllGroups method
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
             return $this->onGetAllGroups();
         } catch (ValidationException $e2) {
             throw $e2;
         } catch (Exception $e) {
-            Logger::error("Exception ", array(
+            $this->logger->error("Exception ", array(
                 "message" => $e->getMessage()
             ));
             $data = [
                 'errorMsg' => $e->getMessage()
             ];
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
             return view('exception')->with($data);
         }
     }
@@ -90,7 +96,7 @@ class GroupController extends Controller
      */
     public function onGetGroup(Request $request)
     {
-        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        $this->logger->info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         try {           
             // Calls this controller's getGroupFromId method with the request input
             $group = $this->getGroupFromId($request->input('idToDisplay'));
@@ -109,16 +115,16 @@ class GroupController extends Controller
                 'group' => $group,
                 'userIsMember' => $userIsMember
             ];
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to group view with " . $group);
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to group view with " . $group);
             return view('group')->with($data);
         } catch (Exception $e) {
-            Logger::error("Exception ", array(
+            $this->logger->error("Exception ", array(
                 "message" => $e->getMessage()
             ));
             $data = [
                 'errorMsg' => $e->getMessage()
             ];
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
             return view('exception')->with($data);
         }
     }
@@ -133,7 +139,7 @@ class GroupController extends Controller
      */
     public function onGetAllGroups()
     {
-        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        $this->logger->info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         try {
             // Create a group business service
             $bs = new GroupBusinessService();
@@ -144,7 +150,7 @@ class GroupController extends Controller
 
             // If flag is empty, returns error page
             if (empty($flag)) {
-                Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . implode($flag));
+                $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . implode($flag));
                 $data = [
                     'process' => "Loading Groups",
                     'back' => "getNewGroup"
@@ -157,16 +163,16 @@ class GroupController extends Controller
             $data = [
                 'allGroups' => $flag
             ];
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to allGroups view");
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to allGroups view");
             return view('allGroups')->with($data);
         } catch (Exception $e) {
-            Logger::error("Exception ", array(
+            $this->logger->error("Exception ", array(
                 "message" => $e->getMessage()
             ));
             $data = [
                 'errorMsg' => $e->getMessage()
             ];
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
             return view('exception')->with($data);
         }
     }
@@ -182,7 +188,7 @@ class GroupController extends Controller
      */
     public function onGetEditGroup(Request $request)
     {
-        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        $this->logger->info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         try {
             // Sets a group equal to this method's getGroupFromId method, using the request input
             $GroupToEdit = $this->getGroupFromId($request->input('idToEdit'));
@@ -191,16 +197,16 @@ class GroupController extends Controller
             $data = [
                 'groupToEdit' => $GroupToEdit
             ];
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to editGroup view");
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to editGroup view");
             return view('editGroup')->with($data);
         } catch (Exception $e) {
-            Logger::error("Exception ", array(
+            $this->logger->error("Exception ", array(
                 "message" => $e->getMessage()
             ));
             $data = [
                 'errorMsg' => $e->getMessage()
             ];
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
             return view('exception')->with($data);
         }
     }
@@ -221,7 +227,7 @@ class GroupController extends Controller
      */
     public function onEditGroup(Request $request)
     {
-        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        $this->logger->info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         try {
             // Creates a ValidationRules and validates the request with the grop edit rules
             $vr = new ValidationRules();
@@ -246,7 +252,7 @@ class GroupController extends Controller
             
             // If flag is is not 1, returns error page
             if ($flag != 1) {
-                Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
+                $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
                 $data = [
                     'process' => "Edit Group",
                     'back' => "getGroups"
@@ -255,19 +261,19 @@ class GroupController extends Controller
             }
             
             // Returns this controller's getAllGroups method
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
             return $this->onGetAllGroups();
         } catch (ValidationException $e2) {
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with validation error");
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with validation error");
             throw $e2;
         } catch (Exception $e) {
-            Logger::error("Exception ", array(
+            $this->logger->error("Exception ", array(
                 "message" => $e->getMessage()
             ));
             $data = [
                 'errorMsg' => $e->getMessage()
             ];
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
             return view('exception')->with($data);
         }
     }
@@ -283,7 +289,7 @@ class GroupController extends Controller
      */
     public function onGetTryDeleteGroup(Request $request)
     {
-        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        $this->logger->info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         
         // Sets a group equal to this method's getGroupFromId method, using the request input
         $idToDelete = $request->input('idToDelete');
@@ -294,7 +300,7 @@ class GroupController extends Controller
         $data = [
             'groupToDelete' => $groupToDelete
         ];
-        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to tryDeleteGroup view");
+        $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to tryDeleteGroup view");
         return view('tryDeleteGroup')->with($data);
     }
     
@@ -312,7 +318,7 @@ class GroupController extends Controller
      */
     public function onDeleteGroup(Request $request)
     {
-        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        $this->logger->info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         
         // Creates a partial group with the id from the request input
         $partialGroup = new GroupModel($request->input('idToDelete'), "", "", "");
@@ -326,7 +332,7 @@ class GroupController extends Controller
         
         // If flag is not equal to 1, returns error page
         if($flag != 1){
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
             
             $data = [
                 'process' => "Deleting Group",
@@ -336,7 +342,7 @@ class GroupController extends Controller
         }
         
         // Returns this method's onGetAllGroups method
-        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
+        $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
         return $this->onGetAllGroups();
     }
     
@@ -351,7 +357,7 @@ class GroupController extends Controller
      */
     public function onGetTryJoinGroup(Request $request)
     {
-        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        $this->logger->info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         
         // Sets a group equal to this method's getGroupFromId method, using the request input
         $group = $this->getGroupFromId($request->input('groupid'));
@@ -360,8 +366,8 @@ class GroupController extends Controller
         $data = [
             'group' => $group
         ];
-        Logger::info($group);
-        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to tryJoinGroup view");
+        $this->logger->info($group);
+        $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to tryJoinGroup view");
         return view('tryJoinGroup')->with($data);
     }
     
@@ -379,7 +385,7 @@ class GroupController extends Controller
      */
     public function onJoinGroup(Request $request)
     {
-        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        $this->logger->info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
              
         // Creates a group_has_user using the request input for groupid and the session for userid
         $group_has_user = new Group_Has_UserModel($request->input('groupid'), Session::get('sp')->getUser_id());
@@ -392,7 +398,7 @@ class GroupController extends Controller
         
         // If flag is not equal to 1, returns error page
         if($flag != 1){
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
             
             $data = [
                 'process' => "Joining Group",
@@ -402,7 +408,7 @@ class GroupController extends Controller
         }
         
         // Returns this method's onGetAllGroups method
-        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
+        $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
         return $this->onGetAllGroups();
     }
     
@@ -417,7 +423,7 @@ class GroupController extends Controller
      */
     public function onGetTryLeaveGroup(Request $request)
     {
-        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        $this->logger->info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         
         // Sets a group equal to this method's getGroupFromId method, using the request input
         $group = $this->getGroupFromId($request->input('groupid'));
@@ -426,7 +432,7 @@ class GroupController extends Controller
         $data = [
             'group' => $group
         ];
-        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to tryLeaveGroup view");
+        $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to tryLeaveGroup view");
         return view('tryLeaveGroup')->with($data);
     }
     
@@ -444,7 +450,7 @@ class GroupController extends Controller
      */
     public function onLeaveGroup(Request $request)
     {
-        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        $this->logger->info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         
         // Creates a group_has_user using the request input for groupid and the session for userid
         $group_has_user = new Group_Has_UserModel($request->input('groupid'), Session::get('sp')->getUser_id());
@@ -457,7 +463,7 @@ class GroupController extends Controller
         
         // If flag is not equal to 1, returns error page
         if($flag != 1){
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
             
             $data = [
                 'process' => "Leaving Group",
@@ -467,7 +473,7 @@ class GroupController extends Controller
         }
         
         // Returns this method's onGetAllGroups method
-        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
+        $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
         return $this->onGetAllGroups();
     }
 
@@ -484,7 +490,7 @@ class GroupController extends Controller
      */
     private function getGroupFromId($groupid)
     {
-        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        $this->logger->info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         // Creates a group with the id
         $partialGroup = new GroupModel($groupid, "", "", 0);
 
@@ -497,7 +503,7 @@ class GroupController extends Controller
 
         // If flag is an int, returns error page
         if (is_int($flag)) {
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
             $data = [
                 'process' => "Get Group",
                 'back' => "home"
@@ -508,7 +514,7 @@ class GroupController extends Controller
         $group = $flag;
 
         // Returns group
-        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $group);
+        $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $group);
         return $group;
     }
 }

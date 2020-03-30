@@ -7,16 +7,22 @@ use App\Models\Services\Business\AccountBusinessService;
 use App\Models\Utility\SecurityPrinciple;
 use App\Models\Utility\ValidationRules;
 use Illuminate\Http\Request;
-use App\Models\Utility\Logger;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\ValidationException;
 use Exception;
 use App\Models\Services\Business\UserJobBusinessService;
 use App\Models\Services\Business\UserSkillBusinessService;
 use App\Models\Services\Business\UserEducationBusinessService;
+use App\Models\Utility\LoggerInterface;
 
 class AccountController extends Controller
 {
+    protected $logger;
+    
+    public function __construct(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
 
     /**
      * Takes in a request from register form
@@ -35,7 +41,7 @@ class AccountController extends Controller
      */
     public function onRegister(Request $request)
     {
-        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        $this->logger->info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         try {
             $vr = new ValidationRules();
             // Creates a ValidationRules and validates the request with the registration rules
@@ -65,7 +71,7 @@ class AccountController extends Controller
 
             // If flag is 0, return error page
             if ($flag != 1) {
-                Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
+                $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
                 $data = [
                     'process' => "Register",
                     'back' => "register"
@@ -73,18 +79,18 @@ class AccountController extends Controller
                 return view('error')->with($data);
             }
             // Return login page
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to login view");
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to login view");
             return view('login');
         } catch (ValidationException $e2) {
             throw $e2;
         } catch (Exception $e) {
-            Logger::error("Exception ", array(
+            $this->logger->error("Exception ", array(
                 "message" => $e->getMessage()
             ));
             $data = [
                 'errorMsg' => $e->getMessage()
             ];
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
             return view('exception')->with($data);
         }
     }
@@ -106,7 +112,7 @@ class AccountController extends Controller
      */
     public function onLogin(Request $request)
     {
-        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        $this->logger->info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         try {
             // Creates a ValidationRules and validates the request with the login rules
             $vr = new ValidationRules();
@@ -129,14 +135,14 @@ class AccountController extends Controller
             // If flag is an int, returns error page
             if (is_int($flag)) {
                 if ($flag == - 1) {
-                    Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
+                    $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
                     $data = [
                         'process' => "(Suspended) Login",
                         'back' => "login"
                     ];
                     return view('error')->with($data);
                 }
-                Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
+                $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
                 $data = [
                     'process' => "Login",
                     'back' => "login"
@@ -149,18 +155,18 @@ class AccountController extends Controller
             Session::put('sp', $sp);
 
             // Returns home page
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to home view");
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to home view");
             return view('home');
         } catch (ValidationException $e2) {
             throw $e2;
         } catch (Exception $e) {
-            Logger::error("Exception ", array(
+            $this->logger->error("Exception ", array(
                 "message" => $e->getMessage()
             ));
             $data = [
                 'errorMsg' => $e->getMessage()
             ];
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
             return view('exception')->with($data);
         }
     }
@@ -173,11 +179,11 @@ class AccountController extends Controller
      */
     public function onLogout()
     {
-        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        $this->logger->info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         // Removes securityPrinciple from session
         Session::forget('sp');
         // Return the login view
-        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to login view");
+        $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to login view");
         return view('login');
     }
 
@@ -191,7 +197,7 @@ class AccountController extends Controller
      */
     public function onGetProfile()
     {
-        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        $this->logger->info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         try {
             // Sets a user equal to this method's getUserFromSession method
             $user = $this->getUserFromSession();
@@ -214,16 +220,16 @@ class AccountController extends Controller
                 'userSkill_array' => $userSkill_array,
                 'userEducation_array' => $userEducation_array
             ];
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to profile view");
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to profile view");
             return view('profile')->with($data);
         } catch (Exception $e) {
-            Logger::error("Exception ", array(
+            $this->logger->error("Exception ", array(
                 "message" => $e->getMessage()
             ));
             $data = [
                 'errorMsg' => $e->getMessage()
             ];
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
             return view('exception')->with($data);
         }
     }
@@ -236,7 +242,7 @@ class AccountController extends Controller
      */
     public function onGetEditProfile()
     {
-        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        $this->logger->info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         try {
             // Sets a user equal to this method's getUserFromSession method
             $user = $this->getUserFromSession();
@@ -245,16 +251,16 @@ class AccountController extends Controller
             $data = [
                 'user' => $user
             ];
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to editProfile view");
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to editProfile view");
             return view('editProfile')->with($data);
         } catch (Exception $e) {
-            Logger::error("Exception ", array(
+            $this->logger->error("Exception ", array(
                 "message" => $e->getMessage()
             ));
             $data = [
                 'errorMsg' => $e->getMessage()
             ];
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
             return view('exception')->with($data);
         }
     }
@@ -276,7 +282,7 @@ class AccountController extends Controller
      */
     public function onEditProfile(Request $request)
     {
-        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        $this->logger->info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         try {
             // Creates a ValidationRules and validates the request with the profile edit rules
             $vr = new ValidationRules();
@@ -302,7 +308,7 @@ class AccountController extends Controller
             $flag = $bs->editUser($u);
             // If flag is 0, returns error page
             if ($flag == 0) {
-                Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
+                $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
                 $data = [
                     'process' => "Edit User",
                     'back' => "getEditProfile"
@@ -316,19 +322,19 @@ class AccountController extends Controller
             Session::put('sp', $sp);
 
             // Returns this controller's getProfile method
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to Profile view");
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to Profile view");
             return $this->onGetProfile();
         } catch (ValidationException $e2) {
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with validation error");
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with validation error");
             throw $e2;
         } catch (Exception $e) {
-            Logger::error("Exception ", array(
+            $this->logger->error("Exception ", array(
                 "message" => $e->getMessage()
             ));
             $data = [
                 'errorMsg' => $e->getMessage()
             ];
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
             return view('exception')->with($data);
         }
     }
@@ -345,7 +351,7 @@ class AccountController extends Controller
      */
     private function getUserFromSession()
     {
-        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        $this->logger->info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         // Gets userid from session
         $userid = Session::get('sp')->getUser_id();
         // Creates a user with the id
@@ -359,7 +365,7 @@ class AccountController extends Controller
 
         // If flag is an int, returns error page
         if (is_int($flag)) {
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
             $data = [
                 'process' => "Get User",
                 'back' => "home"
@@ -370,7 +376,7 @@ class AccountController extends Controller
         $user = $flag;
 
         // Returns user
-        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $user);
+        $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $user);
         return $user;
     }
 
@@ -387,7 +393,7 @@ class AccountController extends Controller
      */
     private function getUserFromId($userid)
     {
-        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        $this->logger->info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         // Creates a user with the id
         $partialUser = new UserModel($userid, "", "", "", "", 0, 0);
         // Creates an account business service
@@ -399,7 +405,7 @@ class AccountController extends Controller
 
         // If flag is an int, returns error page
         if (is_int($flag)) {
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
             $data = [
                 'process' => "Get User",
                 'back' => "home"
@@ -410,7 +416,7 @@ class AccountController extends Controller
         $user = $flag;
 
         // Returns user
-        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $user);
+        $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $user);
         return $user;
     }
 }

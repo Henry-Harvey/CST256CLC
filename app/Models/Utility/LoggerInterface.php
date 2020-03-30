@@ -3,14 +3,11 @@ namespace App\Models\Utility;
 
 interface LoggerInterface
 {
+    public function debug($message, $data);
 
-    static function getLogger();
+    public function info($message, $data);
 
-    public static function debug($message, $data);
+    public function warning($message, $data);
 
-    public static function info($message, $data);
-
-    public static function warning($message, $data);
-
-    public static function error($message, $data);
+    public function error($message, $data);
 }

@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use App\Models\Utility\Logger;
+use App\Models\Utility\Logger2;
 
 class LoggingServiceProvider extends ServiceProvider
 {
@@ -25,8 +25,8 @@ class LoggingServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('App\Models\Services\Utility\LoggerInterface', function ($app) {
-            return new Logger();
+        $this->app->singleton('App\Models\Utility\LoggerInterface', function ($app) {
+            return new Logger2();
         });
     }
     
@@ -36,6 +36,6 @@ class LoggingServiceProvider extends ServiceProvider
      * @return array
      */
     public function provides(){
-        return ['App\Models\Services\Utility\LoggerInterface'];
+        return ['App\Models\Utility\LoggerInterface'];
     }
 }

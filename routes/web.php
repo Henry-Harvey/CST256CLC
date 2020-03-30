@@ -234,7 +234,7 @@ Route::post('/getTryLeaveGroup', 'GroupController@onGetTryLeaveGroup');
 Route::post('/processLeaveGroup', 'GroupController@onLeaveGroup');
 
 
-Route::resource('/getProfile', 'UserRestController');
+Route::resource('/getUserProfile', 'UserRestController');
 
 Route::resource('/getAllJobPostings', 'PostRestController');
 

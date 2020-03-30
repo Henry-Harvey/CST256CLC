@@ -30,7 +30,7 @@ class SecurityMiddleware
      */
     public function handle($request, Closure $next)
     {
-        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with path: " . $request->path());
+        //Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1) . " with path: " . $request->path());
                
         // If the request is global, return next
         if($request->is('/')
@@ -50,12 +50,12 @@ class SecurityMiddleware
             // Check if the user is logged out
             if(!Session::get('sp')){
                 // If so, return next
-                Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with success");
+                //Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with success");
                 return $next($request);
             }
             else{
                 // If not, redirect to home
-                Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with failure");
+                //Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with failure");
                 $data = [
                     'process' => "You must be logged out to view this page. Request ",
                     'back' => "home"
@@ -84,12 +84,12 @@ class SecurityMiddleware
                 // Check if the user is an admin
                 if(Session::get('sp')->getRole() != 0){
                     // If so, return next
-                    Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with success");
+                    //Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with success");
                     return $next($request);
                 }
                 else{
                     // If not, redirect home
-                    Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with failure");
+                    //Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with failure");
                     $data = [
                         'process' => "You must be an admin to view this page. Request ",
                         'back' => "home"
@@ -102,12 +102,12 @@ class SecurityMiddleware
             // Check if the user is logged in
             if(Session::get('sp')){
                 // If so, return next
-                Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with success");
+                //Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with success");
                 return $next($request);
             }
             else{
                 // If not, redirect to login
-                Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with failure");
+                //Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with failure");
                 $data = [
                     'process' => "You must be logged in to view this page. Request ",
                     'back' => "login"

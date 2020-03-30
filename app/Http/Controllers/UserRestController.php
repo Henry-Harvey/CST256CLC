@@ -4,12 +4,19 @@ namespace App\Http\Controllers;
 
 use Exception;
 use App\Models\Utility\DTO;
-use App\Models\Utility\Logger;
+use App\Models\Utility\LoggerInterface;
 use App\Models\Services\Business\AccountBusinessService;
 use App\Models\Objects\UserModel;
 
 class UserRestController extends Controller
 {
+    protected $logger;
+    
+    public function __construct(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
+    
     /**
      * Display the specified resource.
      *
@@ -18,7 +25,7 @@ class UserRestController extends Controller
      */
     public function show($user_id)
     {
-        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        $this->logger->info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         try {
             $partialUser = new UserModel($user_id, "", "", "", "", "", "");
             
@@ -34,14 +41,14 @@ class UserRestController extends Controller
             // serialize dto to json
             $json = json_encode($dto);
             
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $dto);
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $dto);
             return $json;
         } catch (Exception $e) {
-            Logger::error("Exception ", array(
+            $this->logger->error("Exception ", array(
                 "message" => $e->getMessage()
             ));
             $dto = new DTO(- 1, $e->getMessage(), "");
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $dto);
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $dto);
             return json_encode($dto);
         }
     }

@@ -2,7 +2,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Utility\Logger;
+use App\Models\Utility\LoggerInterface;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\ValidationException;
 use Exception;
@@ -13,6 +13,12 @@ use App\Models\Objects\PostSkillModel;
 
 class PostController extends Controller
 {
+    protected $logger;
+    
+    public function __construct(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
 
     /**
      * Takes in a request from newPost form
@@ -34,7 +40,7 @@ class PostController extends Controller
      */
     public function onCreatePost(Request $request)
     {
-        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        $this->logger->info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         try {
             // Creates a ValidationRules and validates the request with the post rules
             $vr = new ValidationRules();
@@ -86,7 +92,7 @@ class PostController extends Controller
 
             // If flag doesnt equal 1, returns error page
             if ($flag != 1) {
-                Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
+                $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
                 $data = [
                     'process' => "Create Post",
                     'back' => "newPost"
@@ -95,25 +101,25 @@ class PostController extends Controller
             }
 
             // Returns this controller's getAllPosts method
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
             return $this->onGetAllPosts();
         } catch (ValidationException $e2) {
             throw $e2;
         } catch (Exception $e) {
-            Logger::error("Exception ", array(
+            $this->logger->error("Exception ", array(
                 "message" => $e->getMessage()
             ));
             $data = [
                 'errorMsg' => $e->getMessage()
             ];
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
             return view('exception')->with($data);
         }
     }
 
     public function onGetPost(Request $request)
     {
-        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        $this->logger->info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         try {
             $post = $this->getPostFromId($request->input('idToShow'));
 
@@ -121,16 +127,16 @@ class PostController extends Controller
             $data = [
                 'post' => $post
             ];
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to jobPost view");
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to jobPost view");
             return view('jobPost')->with($data);
         } catch (Exception $e) {
-            Logger::error("Exception ", array(
+            $this->logger->error("Exception ", array(
                 "message" => $e->getMessage()
             ));
             $data = [
                 'errorMsg' => $e->getMessage()
             ];
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
             return view('exception')->with($data);
         }
     }
@@ -145,7 +151,7 @@ class PostController extends Controller
      */
     public function onGetAllPosts()
     {
-        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        $this->logger->info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         try {
             // Create a post business service
             $bs = new PostBusinessService();
@@ -156,7 +162,7 @@ class PostController extends Controller
             
             // If flag is empty, returns error page
             if (empty($flag)) {
-                Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . implode($flag));
+                $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . implode($flag));
                 if (Session::get('sp')->getRole() != 0) {
                     $data = [
                         'process' => "Loading Job Posts",
@@ -175,16 +181,16 @@ class PostController extends Controller
             $data = [
                 'allPosts' => $flag
             ];
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to allJobPostings view");
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to allJobPostings view");
             return view('allJobPostings')->with($data);
         } catch (Exception $e) {
-            Logger::error("Exception ", array(
+            $this->logger->error("Exception ", array(
                 "message" => $e->getMessage()
             ));
             $data = [
                 'errorMsg' => $e->getMessage()
             ];
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
             return view('exception')->with($data);
         }
     }
@@ -200,7 +206,7 @@ class PostController extends Controller
      */
     public function onGetEditPost(Request $request)
     {
-        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        $this->logger->info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         try {
             // Sets a post equal to this method's getPostFromId method, using the request input
             $postToEdit = $this->getPostFromId($request->input('idToEdit'));
@@ -209,16 +215,16 @@ class PostController extends Controller
             $data = [
                 'postToEdit' => $postToEdit
             ];
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to editPost view");
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to editPost view");
             return view('editPost')->with($data);
         } catch (Exception $e) {
-            Logger::error("Exception ", array(
+            $this->logger->error("Exception ", array(
                 "message" => $e->getMessage()
             ));
             $data = [
                 'errorMsg' => $e->getMessage()
             ];
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
             return view('exception')->with($data);
         }
     }
@@ -243,7 +249,7 @@ class PostController extends Controller
      */
     public function onEditPost(Request $request)
     {
-        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        $this->logger->info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         try {
             // Creates a ValidationRules and validates the request with the post edit rules
             $vr = new ValidationRules();
@@ -296,7 +302,7 @@ class PostController extends Controller
 
             // If flag is is not 1, returns error page
             if ($flag != 1) {
-                Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
+                $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
                 $data = [
                     'process' => "Edit Post",
                     'back' => "getJobPostings"
@@ -305,19 +311,19 @@ class PostController extends Controller
             }
 
             // Returns this controller's getAllPosts method
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
             return $this->onGetAllPosts();
         } catch (ValidationException $e2) {
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with validation error");
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with validation error");
             throw $e2;
         } catch (Exception $e) {
-            Logger::error("Exception ", array(
+            $this->logger->error("Exception ", array(
                 "message" => $e->getMessage()
             ));
             $data = [
                 'errorMsg' => $e->getMessage()
             ];
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
             return view('exception')->with($data);
         }
     }
@@ -333,7 +339,7 @@ class PostController extends Controller
      */
     public function onTryDeletePost(Request $request)
     {
-        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        $this->logger->info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
 
         // Sets a post equal to this method's getPostFromId method, using the request input
         $post = $this->getPostFromId($request->input('idToDelete'));
@@ -342,7 +348,7 @@ class PostController extends Controller
         $data = [
             'postToDelete' => $post
         ];
-        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to tryDeletePost view");
+        $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to tryDeletePost view");
         return view('tryDeletePost')->with($data);
     }
 
@@ -360,7 +366,7 @@ class PostController extends Controller
      */
     public function onDeletePost(Request $request)
     {
-        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        $this->logger->info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
 
         // Sets a post equal to this method's getPostFromId method, using the request input
         $post = $this->getPostFromId($request->input('idToDelete'));
@@ -374,7 +380,7 @@ class PostController extends Controller
 
         // If flag is not equal to 1, returns error page
         if ($flag != 1) {
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
             $data = [
                 'process' => "Delete Post",
                 'back' => "getJobPostings"
@@ -383,7 +389,7 @@ class PostController extends Controller
         }
 
         // Returns this method's onGetAllUsers method
-        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
+        $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
         return $this->onGetAllPosts();
     }
 
@@ -402,7 +408,7 @@ class PostController extends Controller
      */
     public function onSearchPosts(Request $request)
     {
-        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        $this->logger->info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         try {
             // Sets variables equal to the request inputs
             $title = $request->input('title');
@@ -420,7 +426,7 @@ class PostController extends Controller
 
             // If flag is empty, returns error page
             if (empty($flag)) {
-                Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . implode($flag));
+                $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . implode($flag));
                 $data = [
                     'process' => "Searching Job Posts",
                     'back' => "getSearchJobPostings"
@@ -432,16 +438,16 @@ class PostController extends Controller
             $data = [
                 'foundPosts' => $flag
             ];
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to searchJobPostingsResults view");
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to searchJobPostingsResults view");
             return view('searchJobPostingsResults')->with($data);
         } catch (Exception $e) {
-            Logger::error("Exception ", array(
+            $this->logger->error("Exception ", array(
                 "message" => $e->getMessage()
             ));
             $data = [
                 'errorMsg' => $e->getMessage()
             ];
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
             return view('exception')->with($data);
         }
     }
@@ -457,7 +463,7 @@ class PostController extends Controller
      */
     public function onApply(Request $request)
     {
-        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        $this->logger->info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         try {
             // Sets a post equal to this method's getPostFromId method with the request input
             $post = $this->getPostFromId($request->input('id'));
@@ -466,16 +472,16 @@ class PostController extends Controller
             $data = [
                 'post' => $post
             ];
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to applied view");
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to applied view");
             return view('applied')->with($data);
         } catch (Exception $e) {
-            Logger::error("Exception ", array(
+            $this->logger->error("Exception ", array(
                 "message" => $e->getMessage()
             ));
             $data = [
                 'errorMsg' => $e->getMessage()
             ];
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to exception view");
             return view('exception')->with($data);
         }
     }
@@ -493,7 +499,7 @@ class PostController extends Controller
      */
     private function getPostFromId($postid)
     {
-        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        $this->logger->info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         // Creates a post with the id
         $partialPost = new PostModel($postid, "", "", "", "");
         // Creates a post business service
@@ -505,7 +511,7 @@ class PostController extends Controller
 
         // If flag is an int, returns error page
         if (is_int($flag)) {
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to error view. Flag: " . $flag);
             $data = [
                 'process' => "Get Post",
                 'back' => "home"
@@ -516,7 +522,7 @@ class PostController extends Controller
         $post = $flag;
 
         // Returns post
-        Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $post);
+        $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $post);
         return $post;
     }
 }

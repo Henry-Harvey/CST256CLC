@@ -4,12 +4,19 @@ namespace App\Http\Controllers;
 
 use Exception;
 use App\Models\Utility\DTO;
-use App\Models\Utility\Logger;
+use App\Models\Utility\LoggerInterface;
 use App\Models\Services\Business\PostBusinessService;
 use App\Models\Objects\PostModel;
 
 class PostRestController extends Controller
 {
+    protected $logger;
+    
+    public function __construct(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
+    
     /**
      * Display the specified resource.
      *
@@ -18,7 +25,7 @@ class PostRestController extends Controller
      */
     public function show($post_id)
     {
-        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        $this->logger->info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         try {
             $partialPost = new PostModel($post_id, "", "", "", "");
             
@@ -34,14 +41,14 @@ class PostRestController extends Controller
             // serialize dto to json
             $json = json_encode($dto);
             
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $dto);
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $dto);
             return $json;
         } catch (Exception $e) {
-            Logger::error("Exception ", array(
+            $this->logger->error("Exception ", array(
                 "message" => $e->getMessage()
             ));
             $dto = new DTO(- 1, $e->getMessage(), "");
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $dto);
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $dto);
             return json_encode($dto);
         }
     }
@@ -53,7 +60,7 @@ class PostRestController extends Controller
      */
     public function index()
     {
-        Logger::info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
+        $this->logger->info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         try {
             $bs = new PostBusinessService();
 
@@ -68,14 +75,14 @@ class PostRestController extends Controller
             // serialize dto to json
             $json = json_encode($dto);
 
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $dto);
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $dto);
             return $json;
         } catch (Exception $e) {
-            Logger::error("Exception ", array(
+            $this->logger->error("Exception ", array(
                 "message" => $e->getMessage()
             ));
             $dto = new DTO(- 2, $e->getMessage(), "");
-            Logger::info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $dto);
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $dto);
             return json_encode($dto);
         }
     }
