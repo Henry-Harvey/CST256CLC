@@ -2,7 +2,7 @@
 namespace App\Models\Objects;
 // This model is for containing a job post's skill information
 
-class PostSkillModel
+class PostSkillModel implements \JsonSerializable
 {
 
     private $id;
@@ -51,6 +51,11 @@ class PostSkillModel
     public function __toString()
     {
         return "PostSkill| ID: " . $this->id . " Skill: " . $this->skill . " Post_id " . $this->post_id;
+    }
+    
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 
 }

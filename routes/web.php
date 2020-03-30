@@ -232,3 +232,10 @@ Route::post('/getTryLeaveGroup', 'GroupController@onGetTryLeaveGroup');
 
 // Calls the group controller leave group method from the tryLeaveGroup view form
 Route::post('/processLeaveGroup', 'GroupController@onLeaveGroup');
+
+
+Route::resource('/getProfile', 'UserRestController');
+
+Route::resource('/getAllJobPostings', 'PostRestController');
+
+Route::resource('/getJobPosting', 'PostRestController');

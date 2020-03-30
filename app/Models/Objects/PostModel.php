@@ -2,7 +2,7 @@
 namespace App\Models\Objects;
 // This model is for containing the information for a job posting
 
-class PostModel
+class PostModel implements \JsonSerializable
 {
 
     private $id;
@@ -93,6 +93,11 @@ class PostModel
             return "Post| ID: " . $this->id . " Title: " . $this->title . " Company: " . $this->company . " Location: " . $this->location . " Description: " . $this->description . " PostSkill_array " . implode("||", $this->postSkill_array);;            
         }
         return "Post| ID: " . $this->id . " Title: " . $this->title . " Company: " . $this->company . " Location: " . $this->location . " Description: " . $this->description;
+    }
+    
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 
 }

@@ -34,7 +34,10 @@ class SecurityMiddleware
                
         // If the request is global, return next
         if($request->is('/')
-        || $request->is('home')){
+        || $request->is('home')
+        || $request->is('getProfile/*')
+        || $request->is('getAllJobPostings')
+        || $request->is('getJobPosting/*')){
             return $next($request);
         }
         

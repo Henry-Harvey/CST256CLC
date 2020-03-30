@@ -2,7 +2,7 @@
 namespace App\Models\Objects;
 // This model is for containing the information for people who use the site
 
-class UserModel
+class UserModel implements \JsonSerializable
 {
 
     private $id;
@@ -119,5 +119,10 @@ class UserModel
             return "User| ID: " . $this->id . " First Name: " . $this->first_name . " Last Name: " . $this->last_name . " Location: " . $this->location . " Summary: " . $this->summary . " Role: " . $this->role . " Credentials ID: " . $this->credentials_id . " " . $this->credentials;
         }
         return "User| ID: " . $this->id . "First Name: " . $this->first_name . " Last Name: " . $this->last_name . " Location: " . $this->location . " Summary: " . $this->summary . " Role: " . $this->role . " Credentials ID: " . $this->credentials_id;
+    }
+    
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }
