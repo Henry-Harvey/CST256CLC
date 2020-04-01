@@ -11,13 +11,13 @@
 <div class="form-group">
 <label for="school">School</label>
 <input style="width: 30%" type="text" class="form-control" id="school" placeholder="School" name="school">
-{{$errors->first('title')}}
+{{$errors->first('school')}}
 </div>
 
 <div class="form-group">
 <label for="degree">Degree</label>
 <input style="width: 30%" type="text" class="form-control" id="degree" placeholder="Degree" name="degree">
-{{$errors->first('company')}}
+{{$errors->first('degree')}}
 </div>
 
 <div class="form-group">

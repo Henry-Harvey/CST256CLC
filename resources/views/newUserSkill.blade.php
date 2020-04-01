@@ -11,7 +11,7 @@
 <div class="form-group">
 <label for="skill">Skill</label>
 <input style="width: 30%" type="text" class="form-control" id="skill" placeholder="Skill" name="skill">
-{{$errors->first('title')}}
+{{$errors->first('skill')}}
 </div>
 
 <button type="submit" class="btn btn-dark">Save</button>
