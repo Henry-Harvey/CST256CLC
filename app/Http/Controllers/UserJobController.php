@@ -67,9 +67,8 @@ class UserJobController extends Controller
             }
             
             // Creates a new account controller and returns its onGetProfile method
-            $c = new AccountController();
             $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
-            return $c->onGetProfile();
+            return app('App\Http\Controllers\AccountController')->onGetProfile();
         } catch (ValidationException $e2) {
             throw $e2;
         } catch (Exception $e) {
@@ -167,9 +166,8 @@ class UserJobController extends Controller
             }
             
             // Creates a new account controller and returns its onGetProfile method
-            $c = new AccountController();
             $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
-            return $c->onGetProfile();
+            return app('App\Http\Controllers\AccountController')->onGetProfile();
         } catch (ValidationException $e2) {
             $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with validation error");
             throw $e2;
@@ -246,9 +244,8 @@ class UserJobController extends Controller
         }
         
         // Creates a new account controller and returns its onGetProfile method
-        $c = new AccountController();
         $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $flag);
-        return $c->onGetProfile();
+        return app('App\Http\Controllers\AccountController')->onGetProfile();
     }
        
     /**
