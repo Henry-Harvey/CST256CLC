@@ -18,7 +18,7 @@
 				<th>Title</th>
 				<th>Description</th>
 				<th>Members</th>
-				<th></th>
+				<th>View</th>
 			</tr>
 
 		</thead>
