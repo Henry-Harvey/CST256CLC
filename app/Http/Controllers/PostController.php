@@ -410,6 +410,11 @@ class PostController extends Controller
     {
         $this->logger->info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         try {
+            
+            $vr = new ValidationRules();
+            // Creates a ValidationRules and validates the request with the registration rules
+            $this->validate($request, $vr->getSearchRules());
+            
             // Sets variables equal to the request inputs
             $title = $request->input('title');
             $description = $request->input('description');
