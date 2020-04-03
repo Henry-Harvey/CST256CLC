@@ -13,7 +13,7 @@
 
 <div>
 
-	<table class="display">
+	<table class="table">
 
 		<thead>
 
@@ -23,9 +23,9 @@
 				<th>Location</th>
 				<th>Description</th>
 				@if(Session::get('sp')->getRole() != 0)
-				<th></th>
-				<th></th>
-				<th></th>
+				<th>View</th>
+				<th>Edit</th>
+				<th>Delete</th>
 				@endif
 				
 			</tr>
@@ -70,7 +70,7 @@
 			</tr>
 				
 			<tr>
-				<td colspan="4">
+				<td colspan="7">
 				Skills: 
 				@foreach ($post->getPostSkill_array() as $skill)
 					{{$skill->getSkill()}} | 
@@ -82,5 +82,7 @@
 		</tbody>
 
 	</table>
+	<br>
 </div>
 @endsection
+
