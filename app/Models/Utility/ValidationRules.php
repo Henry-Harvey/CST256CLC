@@ -90,5 +90,18 @@ class ValidationRules
         ];
         return $rules;
     }
+    
+     
+    public function getSearchRules()
+    {
+        $rules = [
+            
+            'title' => 'Required | Between: 1,50',
+            'description' => 'Required | Between 1,75'
+            
+        ];
+        return $rules;
+    }
+    
 }
 
