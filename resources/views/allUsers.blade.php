@@ -8,7 +8,7 @@
 </div>
 
 <div>
-	<table id="users" class="display">
+	<table id="users" class="table">
 
 		<thead>
 
