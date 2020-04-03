@@ -12,7 +12,7 @@
 @endif
 
 <div>
-@foreach ($allPosts)
+
 	<table class="display">
 
 		<thead>
@@ -82,6 +82,5 @@
 		</tbody>
 
 	</table>
-	@endforeach
 </div>
 @endsection
