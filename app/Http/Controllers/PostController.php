@@ -447,6 +447,7 @@ class PostController extends Controller
             $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to searchJobPostingsResults view");
             return view('searchJobPostingsResults')->with($data);
              } catch (ValidationException $e2) {
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with validation error");
             throw $e2;
         } catch (Exception $e) {
             $this->logger->error("Exception ", array(
