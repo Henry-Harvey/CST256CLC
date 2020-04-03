@@ -12,7 +12,7 @@
 @endif
 
 <div>
-	<table class="display">
+	<table class="table">
 
 		<thead>
 
