@@ -37,8 +37,8 @@
 				<th>Title</th>
 				<th>Company</th>
 				<th>Years</th>
-				<th></th>
-				<th></th>
+				<th>Edit</th>
+				<th>Delete</th>
 			</tr>
 		</thead>
 		<tbody>
