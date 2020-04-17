@@ -8,7 +8,7 @@
 </div>
 
 <div>
-	<table id="users" class="display">
+	<table id="users" class="table">
 
 		<thead>
 
@@ -21,9 +21,9 @@
 				<th>Role</th>
 				<th>Username</th>
 				<th>Password</th>
-				<th></th>
-				<th></th>
-				<th></th>
+				<th>View</th>
+				<th>Suspend</th>
+				<th>Delete</th>
 			</tr>
 
 		</thead>

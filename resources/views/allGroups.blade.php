@@ -10,7 +10,7 @@
 <a href="getNewGroup">Create new</a>
 
 <div>
-	<table id="users" class="display">
+	<table id="users" class="table">
 
 		<thead>
 
@@ -18,7 +18,7 @@
 				<th>Title</th>
 				<th>Description</th>
 				<th>Members</th>
-				<th></th>
+				<th>View</th>
 			</tr>
 
 		</thead>

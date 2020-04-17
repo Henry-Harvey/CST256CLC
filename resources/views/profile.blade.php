@@ -37,8 +37,8 @@
 				<th>Title</th>
 				<th>Company</th>
 				<th>Years</th>
-				<th></th>
-				<th></th>
+				<th>Edit</th>
+				<th>Delete</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -79,8 +79,8 @@
 		<thead>
 			<tr>
 				<th>Skill</th>
-				<th></th>
-				<th></th>
+				<th>Edit</th>
+				<th>Delete</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -121,8 +121,8 @@
 				<th>School</th>
 				<th>Degree</th>
 				<th>Years</th>
-				<th></th>
-				<th></th>
+				<th>Edit</th>
+				<th>Delete</th>
 			</tr>
 		</thead>
 		<tbody>

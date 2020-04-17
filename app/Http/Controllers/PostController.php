@@ -1,10 +1,11 @@
 <?php
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+
 use App\Models\Utility\LoggerInterface;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Http\Request;
 use Exception;
 use App\Models\Services\Business\PostBusinessService;
 use App\Models\Utility\ValidationRules;
@@ -410,6 +411,11 @@ class PostController extends Controller
     {
         $this->logger->info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         try {
+            
+            $vr = new ValidationRules();
+            // Creates a ValidationRules and validates the request with the registration rules
+            $this->validate($request, $vr->getSearchRules());
+            
             // Sets variables equal to the request inputs
             $title = $request->input('title');
             $description = $request->input('description');
@@ -440,6 +446,9 @@ class PostController extends Controller
             ];
             $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " to searchJobPostingsResults view");
             return view('searchJobPostingsResults')->with($data);
+             } catch (ValidationException $e2) {
+            $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with validation error");
+            throw $e2;
         } catch (Exception $e) {
             $this->logger->error("Exception ", array(
                 "message" => $e->getMessage()
