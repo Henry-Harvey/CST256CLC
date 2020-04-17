@@ -253,7 +253,7 @@ class PostController extends Controller
         try {
             // Creates a ValidationRules and validates the request with the post edit rules
             $vr = new ValidationRules();
-            // $this->validate($request, $vr->getPostEditRules());
+            $this->validate($request, $vr->getPostRules());
 
             // Sets variables equal to request inputs
             $id = $request->input('id');

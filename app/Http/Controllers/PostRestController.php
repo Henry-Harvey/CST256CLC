@@ -18,27 +18,36 @@ class PostRestController extends Controller
     }
     
     /**
-     * Display the specified resource.
+     * Takes in a post id
+     * Creates a partial post from the id
+     * Creates a post business service and call its getPost method
+     * If the result is an int, creates a dto with post not found
+     * Else creates a dto with the post
+     * Serializes the dto and returns it
      *
-     * @param int $id
+     * @param int $post_id
      * @return \Illuminate\Http\Response
      */
     public function show($post_id)
     {
         $this->logger->info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         try {
+            // Creates a partial post from the id
             $partialPost = new PostModel($post_id, "", "", "", "");
             
+            // Creates a post business service and call its getPost method
             $bs = new PostBusinessService();
             $post = $bs->getPost($partialPost);
             
+            // If the result is an int, creates a dto with post not found
             if (is_int($post)) {
                 $dto = new DTO(- 2, "Post not found", $post);
+                // Else creates a dto with the post
             } else {
                 $dto = new DTO(0, "OK", $post);
             }
             
-            // serialize dto to json
+            // Serializes the dto and returns it
             $json = json_encode($dto);
             
             $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $dto);
@@ -54,7 +63,10 @@ class PostRestController extends Controller
     }
     
     /**
-     * Display a listing of the resource.
+     * Creates a post business service and call its getAllPosts method
+     * If the result is empty, creates a dto with post not found
+     * Else creates a dto with the posts
+     * Serializes the dto and returns it
      *
      * @return \Illuminate\Http\Response
      */
@@ -62,17 +74,19 @@ class PostRestController extends Controller
     {
         $this->logger->info("\Entering " . substr(strrchr(__METHOD__, "\\"), 1));
         try {
+            // Creates a post business service and call its getAllPosts method
             $bs = new PostBusinessService();
-
             $posts = $bs->getAllPosts();
 
+            // If the result is empty, creates a dto with post not found
             if (empty($posts)) {
                 $dto = new DTO(- 2, "No Posts found", $posts);
+                // Else creates a dto with the posts
             } else {
                 $dto = new DTO(0, "OK", $posts);
             }
 
-            // serialize dto to json
+            // Serializes the dto and returns it
             $json = json_encode($dto);
 
             $this->logger->info("/Exiting  " . substr(strrchr(__METHOD__, "\\"), 1) . " with " . $dto);
