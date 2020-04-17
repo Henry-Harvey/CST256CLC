@@ -1,4 +1,11 @@
 <?php
+/**
+ * Model | app/Models/Utility/SecurityPrinciple.php
+ * Model for holding useful informatin to store in the session
+ *
+ * @package     cst256_milestone
+ * @author      Henry Harvey & Jacob Taylor
+ */
 namespace App\Models\Utility;
 // This class contains the information that is stored in the session
 

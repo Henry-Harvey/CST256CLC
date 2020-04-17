@@ -1,4 +1,11 @@
 <?php
+/**
+ * Business Service | app/Models/Services/Business/UserSkillBusinessService.php
+ * Business Service for dealing with user skill logic
+ *
+ * @package     cst256_milestone
+ * @author      Henry Harvey & Jacob Taylor
+ */
 namespace App\Models\Services\Business;
 
 use App\Models\Objects\UserSkillModel;

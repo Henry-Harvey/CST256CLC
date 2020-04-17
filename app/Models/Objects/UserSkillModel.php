@@ -1,4 +1,11 @@
 <?php
+/**
+ * Model | app/Models/Objects/UserSkillModel.php
+ * Model for holding user skill information
+ *
+ * @package     cst256_milestone
+ * @author      Henry Harvey & Jacob Taylor
+ */
 namespace App\Models\Objects;
 // This model is for containing the user's skill information
 

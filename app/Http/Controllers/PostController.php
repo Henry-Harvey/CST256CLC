@@ -1,4 +1,11 @@
 <?php
+/**
+ * Controller | app/Htp/Controllers/PostController.php
+ * Controller for handling job postings
+ *
+ * @package     cst256_milestone
+ * @author      Henry Harvey & Jacob Taylor
+ */
 namespace App\Http\Controllers;
 
 

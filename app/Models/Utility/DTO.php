@@ -1,7 +1,13 @@
 <?php
+/**
+ * Model | app/Models/Utility/DTO.php
+ * Model for holding data transfer object information
+ *
+ * @package     cst256_milestone
+ * @author      Henry Harvey & Jacob Taylor
+ */
 namespace App\Models\Utility;
 
-// product class
 class DTO implements \JsonSerializable
 {
 

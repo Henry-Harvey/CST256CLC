@@ -1,4 +1,11 @@
 <?php
+/**
+ * Business Service | app/Models/Services/Business/GroupBusinessService.php
+ * Business Service for dealing with group logic
+ *
+ * @package     cst256_milestone
+ * @author      Henry Harvey & Jacob Taylor
+ */
 namespace App\Models\Services\Business;
 
 use App\Models\Utility\DatabaseModel;

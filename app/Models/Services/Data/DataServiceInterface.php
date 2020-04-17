@@ -1,4 +1,11 @@
 <?php
+/**
+ * Interface | app/Models/Services/Data/DataServiceInterface.php
+ * Interface for data services
+ *
+ * @package     cst256_milestone
+ * @author      Henry Harvey & Jacob Taylor
+ */
 namespace App\Models\Services\Data;
 
 interface DataServiceInterface

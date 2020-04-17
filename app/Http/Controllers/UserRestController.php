@@ -1,5 +1,11 @@
 <?php
-
+/**
+ * Controller | app/Htp/Controllers/UserRestController.php
+ * Controller for handling user API requests
+ *
+ * @package     cst256_milestone
+ * @author      Henry Harvey & Jacob Taylor
+ */
 namespace App\Http\Controllers;
 
 use Exception;

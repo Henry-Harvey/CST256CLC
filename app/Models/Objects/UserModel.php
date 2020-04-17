@@ -1,4 +1,11 @@
 <?php
+/**
+ * Model | app/Models/Objects/UserModel.php
+ * Model for holding user information
+ *
+ * @package     cst256_milestone
+ * @author      Henry Harvey & Jacob Taylor
+ */
 namespace App\Models\Objects;
 // This model is for containing the information for people who use the site
 

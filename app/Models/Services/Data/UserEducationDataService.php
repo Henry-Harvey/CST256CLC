@@ -1,4 +1,11 @@
 <?php
+/**
+ * Data Service | app/Models/Services/Data/UserEducationDataService.php
+ * Data Service for accessing the User_eucation db table
+ *
+ * @package     cst256_milestone
+ * @author      Henry Harvey & Jacob Taylor
+ */
 namespace App\Models\Services\Data;
 
 use App\Models\Utility\DatabaseException;

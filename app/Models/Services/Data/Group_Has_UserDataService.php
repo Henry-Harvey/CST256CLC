@@ -1,4 +1,11 @@
 <?php
+/**
+ * Data Service | app/Models/Services/Data/Group_Has_UserDataService.php
+ * Data Service for accessing the Groups_Has_Users db table
+ *
+ * @package     cst256_milestone
+ * @author      Henry Harvey & Jacob Taylor
+ */
 namespace App\Models\Services\Data;
 
 use App\Models\Utility\DatabaseException;

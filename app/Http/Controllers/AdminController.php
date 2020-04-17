@@ -1,4 +1,11 @@
 <?php
+/**
+ * Controller | app/Htp/Controllers/AdminController.php
+ * Controller for handling admin users
+ *
+ * @package     cst256_milestone
+ * @author      Henry Harvey & Jacob Taylor
+ */
 namespace App\Http\Controllers;
 
 use App\Models\Objects\UserModel;

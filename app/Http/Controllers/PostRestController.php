@@ -1,5 +1,11 @@
 <?php
-
+/**
+ * Controller | app/Htp/Controllers/PostRestController.php
+ * Controller for handling post API requests
+ *
+ * @package     cst256_milestone
+ * @author      Henry Harvey & Jacob Taylor
+ */
 namespace App\Http\Controllers;
 
 use Exception;

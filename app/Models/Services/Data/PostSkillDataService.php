@@ -1,4 +1,11 @@
 <?php
+/**
+ * Data Service | app/Models/Services/Data/PostSkillDataService.php
+ * Data Service for accessing the Post_skills db table
+ *
+ * @package     cst256_milestone
+ * @author      Henry Harvey & Jacob Taylor
+ */
 namespace App\Models\Services\Data;
 
 use App\Models\Utility\DatabaseException;

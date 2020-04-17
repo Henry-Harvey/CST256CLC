@@ -1,4 +1,11 @@
 <?php
+/**
+ * Data Service | app/Models/Services/Data/CredentialsDataService.php
+ * Data Service for accessing the credentials db table
+ *
+ * @package     cst256_milestone
+ * @author      Henry Harvey & Jacob Taylor
+ */
 namespace App\Models\Services\Data;
 
 use App\Models\Objects\CredentialsModel;

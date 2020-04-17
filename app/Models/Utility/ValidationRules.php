@@ -1,4 +1,11 @@
 <?php
+/**
+ * Model | app/Models/Utility/ValidationRules.php
+ * Model for holding Validation Rules information
+ *
+ * @package     cst256_milestone
+ * @author      Henry Harvey & Jacob Taylor
+ */
 namespace App\Models\Utility;
 // this class contains the rules for form validation
 

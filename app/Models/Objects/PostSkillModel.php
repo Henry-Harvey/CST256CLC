@@ -1,4 +1,11 @@
 <?php
+/**
+ * Model | app/Models/Objects/PostSkillModel.php
+ * Model for holding job posting skill information
+ *
+ * @package     cst256_milestone
+ * @author      Henry Harvey & Jacob Taylor
+ */
 namespace App\Models\Objects;
 // This model is for containing a job post's skill information
 

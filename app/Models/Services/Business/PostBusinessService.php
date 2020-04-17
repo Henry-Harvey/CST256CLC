@@ -1,4 +1,11 @@
 <?php
+/**
+ * Business Service | app/Models/Services/Business/PostBusinessService.php
+ * Business Service for dealing with job posting logic
+ *
+ * @package     cst256_milestone
+ * @author      Henry Harvey & Jacob Taylor
+ */
 namespace App\Models\Services\Business;
 
 use App\Models\Utility\DatabaseModel;

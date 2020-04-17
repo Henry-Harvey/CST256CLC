@@ -1,4 +1,11 @@
 <?php
+/**
+ * Business Service | app/Models/Services/Business/AccountBusinessService.php
+ * Business Service for dealing with account logic
+ *
+ * @package     cst256_milestone
+ * @author      Henry Harvey & Jacob Taylor
+ */
 namespace App\Models\Services\Business;
 
 use App\Models\Services\Data\UserDataService;

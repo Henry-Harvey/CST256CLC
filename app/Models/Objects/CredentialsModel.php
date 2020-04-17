@@ -1,4 +1,11 @@
 <?php
+/**
+ * Model | app/Models/Objects/CredentialsModel.php
+ * Model for holding user login information
+ *
+ * @package     cst256_milestone
+ * @author      Henry Harvey & Jacob Taylor
+ */
 namespace App\Models\Objects;
 //This model is for containing the information for people to log in to the site
 

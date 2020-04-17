@@ -1,4 +1,11 @@
 <?php
+/**
+ * Model | app/Models/Utility/Logger.php
+ * Model for holding logger information (static)
+ *
+ * @package     cst256_milestone
+ * @author      Henry Harvey & Jacob Taylor
+ */
 namespace App\Models\Utility;
 
 use Illuminate\Support\Facades\Log;

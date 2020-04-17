@@ -1,4 +1,11 @@
 <?php
+/**
+ * Model | app/Models/Utility/DatabaseException.php
+ * Model for creating a database exception
+ *
+ * @package     cst256_milestone
+ * @author      Henry Harvey & Jacob Taylor
+ */
 namespace App\Models\Utility;
 //This model is for creating a custom database exception
 

@@ -1,4 +1,11 @@
 <?php
+/**
+ * Controller | app/Htp/Controllers/GroupController.php
+ * Controller for handling groups
+ *
+ * @package     cst256_milestone
+ * @author      Henry Harvey & Jacob Taylor
+ */
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;

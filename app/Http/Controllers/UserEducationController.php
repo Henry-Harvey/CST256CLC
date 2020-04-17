@@ -1,4 +1,11 @@
 <?php
+/**
+ * Controller | app/Htp/Controllers/UserEducationController.php
+ * Controller for handling user education
+ *
+ * @package     cst256_milestone
+ * @author      Henry Harvey & Jacob Taylor
+ */
 namespace App\Http\Controllers;
 
 use App\Models\Objects\UserEducationModel;

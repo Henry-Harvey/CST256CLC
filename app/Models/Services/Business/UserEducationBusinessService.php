@@ -1,4 +1,11 @@
 <?php
+/**
+ * Business Service | app/Models/Services/Business/UserEducationBusinessService.php
+ * Business Service for dealing with user education logic
+ *
+ * @package     cst256_milestone
+ * @author      Henry Harvey & Jacob Taylor
+ */
 namespace App\Models\Services\Business;
 
 use App\Models\Utility\Logger;
