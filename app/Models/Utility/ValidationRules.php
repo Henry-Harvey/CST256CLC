@@ -103,8 +103,8 @@ class ValidationRules
     {
         $rules = [
             
-            'title' => 'Required | Between:1,50',
-            'description' => 'Required | Between:1,75'
+            'title' => 'Between:1,50',
+            'description' => 'Between:1,75'
             
         ];
         return $rules;
