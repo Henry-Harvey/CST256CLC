@@ -76,8 +76,8 @@
 
 html, body {
 	height: 100%;
-	/* 	color: rgb(218, 215, 210);
-	background-color: rgb(24, 26, 27); */
+	color: rgb(218, 215, 210);
+	background-color: rgb(24, 26, 27);
 	position: relative;
 }
 
